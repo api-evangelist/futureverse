@@ -1,0 +1,191 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  https://docs.therootnetwork.com/asset-register/guides/error-messages (HTTP 200) for the numbered
+  transaction error codes; https://docs.therootnetwork.com/rootrewards/api-reference and
+  /rootrewards/testing-instructions (both HTTP 200) for the REST status semantics; and
+  graphql/futureverse-asset-register.graphql for the typed error objects the schema actually
+  returns.
+format: proprietary
+rfc9457: false
+rfc9457_note: >-
+  Nothing in the Futureverse surface uses application/problem+json. The Asset Register returns typed
+  GraphQL union members carrying `message` (and, on AssetRegisterError, `extensions.code`); the
+  transaction ledger returns its own numbered code enum; RootRewards returns bare HTTP status codes
+  with no documented body shape at all.
+
+envelopes:
+  - api: Futureverse Asset Register API
+    style: typed-union
+    detail: >-
+      Mutations return a union of <Operation>Success and <Operation>Failure. The Failure member
+      carries `errors[]` of a per-operation error object. There is one shared ErrorInterface. HTTP
+      status is 200 for both success and failure, so clients MUST branch on __typename, not status.
+    error_objects:
+      - {type: AssetTreeResultError, fields: [message]}
+      - {type: AssetOperationResultError, fields: [message]}
+      - {type: CreateSchemaError, fields: [message]}
+      - {type: SchemaError, fields: [message]}
+      - {type: AssetRegisterError, fields: [message, extensions]}
+      - {type: AssetRegisterErrorExtensions, fields: [code]}
+      - {type: TransactionError, fields: [message, code]}
+      - {type: GetTransactionResponseFailureType, fields: [message]}
+    weakness: >-
+      Only two of the seven error objects carry a machine-readable code. The rest expose a free-text
+      `message` alone, which means most Asset Register failures cannot be branched on
+      programmatically without string matching.
+  - api: RootRewards Quest API
+    style: http-status-only
+    detail: >-
+      Documented status codes with no documented response body for any non-200. Five distinct
+      failure conditions all collapse into 400.
+  - api: The Root Network Node RPC
+    style: jsonrpc
+    detail: Standard JSON-RPC 2.0 error objects (code, message, data). Not enumerated by Futureverse.
+
+problem_types:
+  # --- Asset Register transaction ledger: numbered codes on TransactionError.code ---
+  - code: FAIL_ARTM_VALIDATION
+    numeric: 1
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: ARTM signature could not be verified
+    detail: >-
+      The signature on the Asset Rights Token Metadata message is invalid or unverifiable — a
+      tampered message, the wrong signing key, or a verification fault.
+    remediation: Re-sign the ARTM with the asset owner's wallet and resubmit unmodified.
+  - code: INVALID_NONCE
+    numeric: 2
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Nonce invalid or already used
+    detail: >-
+      The nonce has already been consumed (replay), is malformed, or is missing.
+    remediation: Re-fetch the current nonce with the getNonceForChainAddress query before each submit.
+  - code: FAIL_NEPTUNE_TRANSACTION
+    numeric: 3
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Underlying Neptune network transaction failed
+    detail: Processing failed on the underlying Neptune network, or the transaction data was invalid.
+    remediation: Retry; if it persists the fault is server-side and not client-correctable.
+  - code: FAIL_NONCE_UPDATE
+    numeric: 4
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Nonce could not be updated
+    detail: Internal failure updating the stored nonce after an otherwise successful transaction.
+    remediation: Internal system error — re-read the nonce and contact support if repeated.
+  - code: INVALID_ARTM
+    numeric: 5
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: ARTM message could not be parsed
+    detail: The message is corrupted, missing required fields, or contains invalid data.
+    remediation: Rebuild the message with @futureverse/artm rather than hand-assembling it.
+  - code: INVALID_ASSET_OWNER
+    numeric: 6
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Asset ownership could not be validated
+    detail: The sender could not be proven to be the rightful owner of the asset.
+    remediation: Confirm the signing address owns the asset on the chain named in the asset DID.
+  - code: INVALID_OPERATION
+    numeric: 7
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Operation not allowed for this transaction type
+    remediation: Check the operation against the Asset Link Operations guide.
+  - code: INVALID_ASSET_PARENT
+    numeric: 8
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: An asset cannot have multiple parents
+    detail: The transaction tried to assign more than one parent node to an asset.
+    remediation: Delete the existing parent link before creating a new one.
+  - code: INVALID_SIGNATURE
+    numeric: 9
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Signature invalid
+    detail: A signature on some part of the transaction data could not be verified.
+  - code: INVALID_ASSET_TYPE
+    numeric: 10
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Asset type not allowed in this context
+    detail: 'For example: assigning an SFT as a parent asset.'
+  - code: MAX_BALANCE_ALLOCATED
+    numeric: 11
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Maximum SFT balance already allocated
+    detail: The transaction would exceed the maximum allowed balance for that semi-fungible token.
+  - code: PARENT_PATH_IN_USE
+    numeric: 12
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Path already in use on the parent asset
+    detail: >-
+      Child paths under a parent must be unique; another child already occupies the requested path.
+    remediation: Choose a different path or unlink the occupying child first.
+  - code: FAIL_LINK_VALIDATION
+    numeric: 13
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Link information failed validation
+    detail: The target asset or link type provided does not meet the register's requirements.
+  - code: ASSET_ALREADY_LINKED
+    numeric: 14
+    api: Futureverse Asset Register API
+    surface: transaction
+    title: Asset is already linked
+    detail: Linking can only be done once for an asset.
+
+  # --- RootRewards Quest API ---
+  - code: '400'
+    api: RootRewards Quest API
+    surface: http
+    title: Bad request
+    detail: >-
+      Overloaded. Documented causes: quests feature flag disabled; quest not active (outside its
+      start/end window); insufficient points remaining; target account not found; quest action type
+      deactivated.
+    remediation: >-
+      No discriminator is published. A client cannot tell "you sent bad input" from "our feature
+      flag is off" from "that user has no RootRewards account" without asking Futureverse.
+    operations: [listPublicQuests, getQuest, allocateQuestPoints, getCampaign]
+  - code: '401'
+    api: RootRewards Quest API
+    surface: http
+    title: Unauthorized
+    detail: Invalid x-api-key, or the key's account does not own the quest.
+    operations: [getQuest, allocateQuestPoints]
+  - code: '404'
+    api: RootRewards Quest API
+    surface: http
+    title: Not found
+    detail: Quest or campaign ID does not exist.
+    operations: [getQuest, allocateQuestPoints, getCampaign]
+
+  # --- Webhook delivery ---
+  - code: webhook-retryable
+    api: Futureverse Asset Register API
+    surface: webhook-delivery
+    title: Subscriber returned a retryable status
+    detail: >-
+      The Subscription Service retries deliveries that fail with 409, 429 or 5xx. It honours the
+      subscriber's Retry-After header, choosing the more conservative of that value and its own
+      policy; a negative Retry-After suppresses the retry entirely.
+    remediation: Return 429 with Retry-After to shed load; return 2xx to acknowledge.
+  - code: webhook-terminal
+    api: Futureverse Asset Register API
+    surface: webhook-delivery
+    title: Subscriber returned a non-retryable status
+    detail: 1xx, 2xx, 3xx and 4xx (excluding 429) are never retried. Max retries per endpoint is 20.
+
+counts:
+  problem_types: 21
+  transaction_codes: 14
+  http_codes: 3
+  webhook_conditions: 2

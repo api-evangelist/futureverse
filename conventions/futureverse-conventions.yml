@@ -1,0 +1,139 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  https://docs.therootnetwork.com/asset-register/getting-started,
+  /asset-register/authentication, /asset-register/guides/asset-register-transaction,
+  /asset-register/guides/subscriptions, /asset-register/guides/error-messages,
+  https://docs.therootnetwork.com/rootrewards/api-reference (all HTTP 200), plus the reflected SDL
+  in graphql/futureverse-asset-register.graphql and the live OIDC discovery document.
+scope: Cross-cutting runtime semantics across the Asset Register, FuturePass and RootRewards.
+
+auth_style:
+  asset_register_read: anonymous
+  asset_register_admin: 'Authorization: <SIWE token> (EIP-4361, generated via the published SIWE helper)'
+  asset_register_write: wallet-signed ARTM message submitted through submitTransaction / assetMutation
+  futurepass: OpenID Connect (PKCE S256; five client-auth methods; PAR supported)
+  rootrewards: 'x-api-key: sk_… (owner-bound)'
+  webhook_delivery: 'API_KEY header set by the Subscription Service on outbound POSTs'
+  see: authentication/futureverse-authentication.yml
+
+idempotency:
+  supported: false
+  keys: false
+  header: null
+  detail: >-
+    No Idempotency-Key header exists on any Futureverse surface, and no operation documents
+    retry-safe semantics. What DOES exist is per-address replay protection on the Asset Register
+    ledger: a client fetches the current nonce with the getNonceForChainAddress query, embeds it in
+    the signed ARTM message, and a reused nonce is rejected with INVALID_NONCE (code 2). That
+    prevents replay of an already-submitted transaction; it does NOT let a client safely retry a
+    request whose response it never saw, because the nonce has already advanced.
+  replay_protection:
+    mechanism: per-chain-address nonce in the signed ARTM message
+    query: getNonceForChainAddress
+    failure_code: INVALID_NONCE
+  gap: >-
+    POST /quests/{questId} on RootRewards allocates points and has no idempotency control at all. A
+    timed-out retry double-allocates from the quest budget, and nothing in the API lets a partner
+    detect that.
+
+pagination:
+  style: relay-cursor
+  spec: 'Relay Cursor Connections — the docs state the API "is fully Relay specification compliant"'
+  request_params: [first, after, last, before]
+  response_fields: [edges, node, cursor, pageInfo.hasNextPage, pageInfo.hasPreviousPage, pageInfo.startCursor, pageInfo.endCursor]
+  connections: 10
+  sorting: SortOrder enum (ASC | DESC)
+  rootrewards:
+    style: limit-offset
+    params: {limit: 'default 20', offset: 'default 0'}
+    scope: payouts[] on GET /quests/{questId} only
+    note: No total count is returned, so a client cannot tell when it has reached the end.
+
+filtering:
+  asset_filter:
+    input: AssetFilter
+    fields: [hasFilters, eqFilters, search]
+    detail: >-
+      Assets can be filtered on presence of a metadata property (hasFilters), equality on a property
+      (eqFilters), or free text (search).
+  node_lookup: Relay `node(id)` root field plus assetsByIds for batch fetch.
+
+field_selection:
+  style: graphql-native
+  detail: >-
+    Field selection is the GraphQL selection set; there is no sparse-fieldset or `expand` parameter
+    because there does not need to be. The composed view is a first-class field instead —
+    Query.assetTree returns the whole resolved JSON-LD tree in one call.
+
+metadata:
+  extensibility:
+    - 'Profile.additionalProperties (updateAdditionalProperty / removeAdditionalProperty)'
+    - 'Account additional properties (updateAccountAdditionalProperty / removeAccountAdditionalProperty)'
+    - 'Metadata.properties / attributes / rawAttributes on every asset'
+  schema_validation: >-
+    Asset metadata is validated against a registered Schema in a Namespace. This is the register's
+    core idea — the metadata contract is published and enforced, not per-application convention.
+
+request_tracing:
+  request_id_header: none-documented
+  detail: >-
+    No X-Request-Id, correlation-id or trace header is documented on any surface. The only
+    per-operation handle a client gets is a TransactionHash from the ledger, which covers signed
+    Asset Register transactions only — not reads and not RootRewards calls.
+
+versioning:
+  asset_register:
+    style: unversioned-endpoint
+    detail: >-
+      https://ar-api.futureverse.app/graphql carries no version segment. GraphQL field deprecation
+      is the intended change mechanism; the reflected SDL currently marks nothing @deprecated.
+  root_network:
+    style: runtime-version
+    detail: >-
+      The chain is versioned as a Substrate runtime (v10.68.0 at the last published changelog
+      entry, 2025-02-12) and changes ship as runtime upgrades. See changelog/.
+  rootrewards:
+    style: unversioned
+    detail: No version segment appears in any documented path.
+  futurepass:
+    style: oidc-discovery
+    detail: Clients are expected to re-read the discovery document rather than pin endpoints.
+
+error_envelope:
+  style: typed-union-per-operation
+  detail: >-
+    Mutations return <Operation>Success | <Operation>Failure. HTTP status is 200 on failure, so
+    clients branch on __typename. Only TransactionError and AssetRegisterErrorExtensions carry a
+    machine-readable code; the other five error objects carry free text only.
+  rfc9457: false
+  see: errors/futureverse-problem-types.yml
+
+rate_limit_signalling:
+  request_side: none-documented
+  response_headers: none-documented
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After behaviour is documented for any Futureverse API.
+    The only published throughput guidance is prose: the public RPC nodes are "not for sustained or
+    business use, and they may become unavailable at anytime".
+  see: rate-limits/futureverse-rate-limits.yml
+  inverted_case: >-
+    Futureverse READS Retry-After rather than sending it — the webhook Subscription Service honours
+    a subscriber's Retry-After when backing off deliveries. The provider expects a runtime signal it
+    does not itself emit.
+
+events:
+  style: webhook
+  transport: HTTPS POST with an API_KEY header
+  retries: 'configurable per endpoint, max 20; retried on 409/429/5xx only'
+  see: asyncapi/futureverse-asset-register-events.yml
+
+conventions_notes:
+  - >-
+    Identifiers are DIDs, not opaque strings: 'did:fv-asset:<chainId>:<chainType>:<contract>:<token>'
+    and collection IDs '<chainId>:<chainType>:<contract>'. They are parseable and stable across
+    chains, which is unusual and genuinely useful.
+  - >-
+    The Asset Register models its own infrastructure in the public schema — SchemaCustomDomain
+    exposes SslCertificate and cloudFrontDistribution types. Consumers can therefore see the
+    provider's hosting implementation through the API contract.

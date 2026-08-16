@@ -1,0 +1,64 @@
+generated: '2026-08-16'
+method: probed
+source: https://login.futureverse.app/.well-known/openid-configuration
+source_status: 200
+docs: https://docs.therootnetwork.com/learn/features/identity-protocol
+note: >-
+  derive-oauth-scopes.py found no oauth2 securityScheme to derive from — the only OpenAPI in this
+  repo is the generated RootRewards description, which uses an API key. These scopes are read
+  directly from the live FuturePass OIDC discovery document instead, and saved verbatim to
+  well-known/futureverse-openid-configuration.json.
+
+provider: FuturePass Identity (OpenID Connect)
+issuer: https://login.futureverse.app
+authorization_endpoint: https://login.futureverse.app/auth
+token_endpoint: https://login.futureverse.app/token
+
+scope_count: 2
+scopes:
+  - name: openid
+    description: >-
+      Required OIDC scope. Requests an ID token identifying the FuturePass subject.
+    standard: true
+  - name: offline_access
+    description: >-
+      Requests a refresh token so the client can obtain new access tokens without user interaction.
+    standard: true
+
+finding: >-
+  FuturePass publishes exactly the two baseline OIDC scopes and nothing else. There is no
+  product-level authorization vocabulary — no read/write split, no per-resource scope, no
+  consent-visible permission a user could reason about. Everything an integrating application is
+  permitted to do is decided outside the token. What FuturePass DOES carry is unusually rich
+  identity: the discovery document advertises custom claims (eoa, custodian, chainId, futurepass,
+  connectorId, passName) that bind the OIDC subject to an on-chain smart wallet. So the token is
+  strong on WHO and silent on WHAT.
+
+claims_supported:
+  - sub
+  - iss
+  - sid
+  - auth_time
+  - email
+  - profile
+  - eoa
+  - custodian
+  - chainId
+  - futurepass
+  - connectorId
+  - passName
+
+other_surfaces:
+  - api: Futureverse Asset Register API
+    model: >-
+      No OAuth scopes. Authorization is either a SIWE bearer token (admin operations) or a
+      wallet-signed ARTM transaction (state changes). Permission is proven by key ownership, not
+      granted by scope.
+  - api: RootRewards Quest API
+    model: >-
+      No OAuth. An `sk_`-prefixed API key bound to the quest owner account; authorization is
+      ownership of the quest, checked server-side.
+  - api: The Root Network Documentation MCP Server
+    model: >-
+      Unauthenticated. Neither /.well-known/oauth-protected-resource nor
+      /.well-known/oauth-authorization-server is served on the MCP host (both 404).

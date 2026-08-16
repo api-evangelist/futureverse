@@ -1,0 +1,1245 @@
+# Futureverse Asset Register API — GraphQL SDL
+# generated: '2026-08-16'
+# method: probed
+# source: https://ar-api.futureverse.app/graphql (POST introspection query, HTTP 200, anonymous)
+# docs: https://docs.therootnetwork.com/asset-register/getting-started
+# ownership: The Asset Register documentation at docs.therootnetwork.com/asset-register/getting-started
+#   names https://ar-api.futureverse.app/graphql as the production endpoint and
+#   https://ar-api.futureverse.cloud/graphql as staging — both futureverse-owned domains.
+# note: Introspection is OPEN and unauthenticated on this endpoint; mutations require a SIWE
+#   (Sign-In With Ethereum) bearer token. This SDL is the server's own reflected schema, not a
+#   hand-written approximation.
+# stats: 186 types, 29 Query fields, 28 Mutation fields, no Subscription type.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+
+enum AssetLinkType {
+  ASSET_LINK
+  INVENTORY_LINK
+}
+
+"""The type of asset"""
+enum AssetType {
+  ERC721
+  ERC1155
+}
+
+"""The order in which to sort"""
+enum SortOrder {
+  ASC
+  DESC
+}
+
+"""A filter for the properties and attributes in metadata"""
+input AssetFilter {
+  hasFilters: [String!]
+  eqFilters: [EqFilter!]
+  search: String
+}
+
+
+input AssetInput {
+  collectionId: CollectionId!
+  tokenId: String!
+}
+
+"""GraphQL input type AssetMutationInput"""
+input AssetMutationInput {
+  """
+  The 'transaction' field of the input should be of type 'AssetTransactionMessage' 
+   and must always have a value, and must be ABNF format
+  """
+  transaction: AssetTransactionMessage!
+  signature: Signature!
+}
+
+
+input AssetTreeCollectionInput {
+  chainType: ChainType!
+  chainId: ChainId!
+  location: CollectionLocation!
+}
+
+
+input AssetTreeInput {
+  tokenId: String!
+  collection: AssetTreeCollectionInput!
+}
+
+"""GraphQL input type CollectionInput"""
+input CollectionInput {
+  collectionId: CollectionId!
+  schemaIdentifier: SchemaIdentifier!
+}
+
+
+input CreateNamespaceInput {
+  domain: String!
+  suffix: String!
+}
+
+
+input CreateProfileInput {
+  owner: ChainAddress!
+  displayName: String!
+}
+
+"""Create Schema Input"""
+input CreateSchemaInput {
+  namespace: Url!
+  version: Float!
+  name: String!
+  schema: String!
+}
+
+
+input CreateWebhookEndpointInput {
+  url: String!
+  retries: Float
+}
+
+
+input CreateWebhookSubscriptionInput {
+  webhookId: String!
+  type: String!
+  actions: [String!]!
+  collectionId: CollectionId!
+}
+
+
+input DeleteProfileInput {
+  owner: ChainAddress!
+  profileId: String!
+}
+
+
+input DeleteWebhookEndpointInput {
+  webhookId: String!
+}
+
+
+input DeleteWebhookSubscriptionInput {
+  webhookId: String!
+  subscriptionId: String!
+}
+
+"""This filter is used for filter string value"""
+input EqFilter {
+  name: String!
+  value: String!
+}
+
+"""A filter for the generic token"""
+input GenericTokenFilter {
+  name: String!
+  symbol: String!
+  amountRange: [String!]
+}
+
+
+input GetTransactionInput {
+  transactionHash: TransactionHash!
+}
+
+"""GraphQL input type NonceInput"""
+input NonceInput {
+  chainAddress: ChainAddress!
+}
+
+
+input OffChainAssetsInput {
+  creatorId: String!
+}
+
+
+input RegisterAssetImageInput {
+  collectionId: CollectionId!
+  """leave this null if the schema is for the collection"""
+  tokenId: String
+  url: String!
+}
+
+
+input RegisterCollectionDelegationInput {
+  collectionId: CollectionId!
+  address: ChainAddress!
+}
+
+"""Register an off chain asset with Futureverse"""
+input RegisterOffChainAssetInput {
+  """The creator's ID of the off chain asset to be registered. This will be a uuid string"""
+  creatorId: String!
+  """The creator's collection ID of the off chain asset to be registered. This can be any string and will be unique to the creator."""
+  creatorCollectionId: String!
+  """The token ID of the off chain asset. If this is given the token ID must be unique to the creator collection and it will classify the asset as an NFT. If this is not given the asset will be classified as an SFT"""
+  tokenId: String
+}
+
+
+input RegisterSchemaCustomDomainInput {
+  domainName: String!
+}
+
+
+input RegisterTokenSchemaInput {
+  collectionId: CollectionId!
+  """leave this null if the schema is for the collection"""
+  tokenId: String
+  schemaId: SchemaIdentifier!
+}
+
+
+input RemoveAccountAdditionalPropertyInput {
+  owner: ChainAddress!
+  key: String!
+}
+
+
+input RemoveProfileAdditionalPropertyInput {
+  owner: ChainAddress!
+  profileId: String!
+  key: String!
+}
+
+
+input SelectProfileInput {
+  owner: ChainAddress!
+  experience: String!
+  profileId: String!
+}
+
+
+input SetProfileAvatarInput {
+  owner: ChainAddress!
+  profileId: String!
+  collectionId: CollectionId!
+  tokenId: String!
+}
+
+
+input SetProfileDescriptionInput {
+  owner: ChainAddress!
+  profileId: String!
+  description: String!
+}
+
+"""A sort for the asset fields"""
+input Sort {
+  name: String!
+  order: SortOrder!
+}
+
+
+input SubmitTransactionInput {
+  """
+  The 'transaction' field of the input should be of type 'AssetTransactionMessage' 
+   and must always have a value, and must be ABNF format
+  """
+  transaction: AssetTransactionMessage!
+  signature: Signature!
+  """Validate link creation with schema"""
+  check: Boolean
+}
+
+
+input UnselectProfileInput {
+  owner: ChainAddress!
+  experience: String!
+}
+
+
+input UnsetProfileAvatarInput {
+  owner: ChainAddress!
+  profileId: String!
+}
+
+
+input UpdateAccountAdditionalPropertyInput {
+  owner: ChainAddress!
+  key: String!
+  value: PropertyValue!
+}
+
+
+input UpdateAssetProfileInput {
+  assetId: String!
+  key: String!
+  url: String!
+}
+
+
+input UpdateProfileAdditionalPropertyInput {
+  owner: ChainAddress!
+  profileId: String!
+  key: String!
+  value: PropertyValue!
+}
+
+
+input UpdateProfileDisplayNameInput {
+  owner: ChainAddress!
+  profileId: String!
+  displayName: String!
+}
+
+
+input UpdateWebhookEndpointInput {
+  webhookId: String!
+  url: String
+  retries: Float
+}
+
+
+input VerifySchemaCustomDomainInput {
+  domainName: String!
+}
+
+
+interface ErrorInterface {
+  message: String!
+}
+
+
+interface Node {
+  """A globally unique ID of the object."""
+  id: ID!
+}
+
+
+type Account implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  """A Futurepass wallet address"""
+  address: ChainAddress!
+  handle: String
+  rns: RNS
+  additionalProperties: JSONObject!
+  eoa: ChainAddress
+  futurepass: ChainAddress
+  """The profiles owned by the account"""
+  profiles: [Profile!]!
+  """The last used profile for the given experience"""
+  lastUsedProfileByExperience(experience: String): Profile
+}
+
+
+type Asset implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  collectionId: CollectionId!
+  tokenId: String!
+  schema: Schema
+  assetTree: AssetTree
+  """Ownership information of the asset"""
+  ownership: AssetOwnership
+  assetType: AssetType
+  metadata: Metadata
+  links: AssetLink
+  collection: Collection!
+  profiles(key: String): Profiles
+}
+
+
+type AssetConnection {
+  pageInfo: PageInfo!
+  edges: [AssetEdge!]!
+  total: Float
+}
+
+
+type AssetEdge {
+  node: Asset!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type AssetImage implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  collectionId: CollectionId!
+  tokenId: String
+  url: String!
+  version: Float!
+}
+
+
+type AssetImageEdge {
+  node: AssetImage!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type AssetImagesConnection {
+  pageInfo: PageInfo!
+  edges: [AssetImageEdge!]!
+  total: Float
+}
+
+
+type AssetOperationResultError implements ErrorInterface {
+  message: String!
+}
+
+
+type AssetOperationResultFailure {
+  errors: [AssetOperationResultError!]!
+}
+
+
+type AssetOperationResultSuccess {
+  transactionHash: String!
+}
+
+
+type AssetOwner implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  asset: Asset!
+  owner: ChainAddress!
+  balance: Int
+}
+
+
+type AssetOwnerEdge {
+  node: AssetOwner!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type AssetOwnersConnection {
+  pageInfo: PageInfo!
+  edges: [AssetOwnerEdge!]!
+  total: Float
+}
+
+
+type AssetRegisterError {
+  message: String!
+  extensions: AssetRegisterErrorExtensions
+}
+
+
+type AssetRegisterErrorExtensions {
+  code: String!
+}
+
+
+type AssetTree implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  data: JSONLD!
+  nodeId: String!
+}
+
+
+type AssetTreeResultError implements ErrorInterface {
+  message: String!
+}
+
+
+type AssetTreeResultFailure {
+  errors: [AssetTreeResultError!]!
+}
+
+
+type AssetTreeResultSuccess {
+  data: JSONLD!
+}
+
+
+type Avatar {
+  asset: Asset
+  customImage: String
+}
+
+
+type Collection implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  chainId: ChainId!
+  chainType: ChainType!
+  location: CollectionLocation!
+  name: String
+  schema: Schema
+}
+
+
+type CollectionConnection {
+  pageInfo: PageInfo!
+  edges: [CollectionEdge!]!
+  total: Float
+}
+
+
+type CollectionDelegate implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  collection: Collection!
+  delegateAddress: ChainAddress!
+}
+
+
+type CollectionEdge {
+  node: Collection!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type CreateNamespaceSuccess {
+  namespace: Namespace!
+}
+
+
+type CreateProfileSuccess {
+  account: Account!
+  profile: Profile!
+}
+
+
+type CreateSchemaError implements ErrorInterface {
+  message: String!
+}
+
+
+type CreateSchemaFailure {
+  errors: [CreateSchemaError!]!
+}
+
+
+type CreateSchemaSuccess {
+  schema: Schema!
+}
+
+
+type CreateWebhookEndpointSuccess {
+  webhookEndpoint: WebhookEndpoint!
+}
+
+
+type CreateWebhookSubscriptionSuccess {
+  webhookSubscription: WebhookSubscription!
+}
+
+
+type DeleteProfileSuccess {
+  success: Boolean!
+}
+
+
+type DeleteWebhookEndpointSuccess {
+  success: Boolean!
+}
+
+
+type DeleteWebhookSubscriptionSuccess {
+  success: Boolean!
+}
+
+
+type Domain {
+  """A globally unique ID of the object."""
+  id: ID!
+  url: String!
+}
+
+
+type DomainEdge {
+  node: Domain!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type DomainsConnection {
+  pageInfo: PageInfo!
+  edges: [DomainEdge!]!
+  total: Float
+}
+
+
+type GenericToken implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  chainType: ChainType!
+  chainId: ChainId!
+  location: GenericTokenLocation!
+  symbol: String
+  name: String
+  decimals: Float
+  issuer: String
+}
+
+
+type GenericTokenBalance implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  amount: String!
+  owner: Account!
+  genericToken: GenericToken!
+}
+
+
+type GetTransactionResponseFailure {
+  errors: [GetTransactionResponseFailureType!]!
+}
+
+
+type GetTransactionResponseFailureType implements ErrorInterface {
+  message: String!
+}
+
+
+type GetTransactionResponseSuccess {
+  id: TransactionHash!
+  status: String!
+  events: [TransactionEvent!]!
+  error: TransactionError
+}
+
+
+type InventoryAsset implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  collectionId: CollectionId!
+  tokenId: String!
+  sftId: String
+  owner: ChainAddress!
+  assetType: AssetType!
+  metadata: Metadata
+  collection: Collection!
+  profiles(key: String): Profiles
+  parentLink: InventoryParentLink
+  """Indicates this asset is in the process of unlocking until the given unix timestamp in milliseconds"""
+  unlockingUntil: Float
+  assetId: String!
+}
+
+
+type InventoryAssetConnection {
+  pageInfo: PageInfo!
+  edges: [InventoryAssetEdge!]!
+  total: Float
+}
+
+
+type InventoryAssetEdge {
+  node: InventoryAsset!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type InventoryParentLink implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  parent: Asset
+  path: String
+}
+
+
+type Link implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  linkType: AssetLinkType!
+  linkPath: String!
+  sftId: String
+  path: String!
+  asset: Asset
+  offChainAsset: OffChainAsset
+}
+
+
+type Metadata implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  uri: String
+  properties: MetadataProperties
+  attributes: MetadataAttributes
+  rawAttributes: MetadataRawAttributes
+  image: String
+}
+
+
+type Mutation {
+  assetMutation(input: AssetMutationInput!): AssetOperationResponse! @deprecated
+  createSchema(input: CreateSchemaInput!): CreateSchemaResponse!
+  registerCollection(input: CollectionInput!): SchemaCollectionResponse! @deprecated
+  registerOffChainAsset(input: RegisterOffChainAssetInput!): RegisterOffChainAssetUnion!
+  createNamespace(input: CreateNamespaceInput!): CreateNamespaceSuccess
+  submitTransaction(input: SubmitTransactionInput!): SubmitTransactionSuccess!
+  createWebhookEndpoint(input: CreateWebhookEndpointInput!): CreateWebhookEndpointSuccess!
+  deleteWebhookEndpoint(input: DeleteWebhookEndpointInput!): DeleteWebhookEndpointSuccess!
+  updateWebhookEndpoint(input: UpdateWebhookEndpointInput!): UpdateWebhookEndpointSuccess!
+  createWebhookSubscription(input: CreateWebhookSubscriptionInput!): CreateWebhookSubscriptionSuccess!
+  deleteWebhookSubscription(input: DeleteWebhookSubscriptionInput!): DeleteWebhookSubscriptionSuccess!
+  registerTokenSchema(input: RegisterTokenSchemaInput!): RegisterTokenSchemaSuccess!
+  registerCollectionDelegation(input: RegisterCollectionDelegationInput!): RegisterCollectionDelegationSuccess!
+  registerSchemaCustomDomain(input: RegisterSchemaCustomDomainInput!): RegisterSchemaCustomDomainSuccess!
+  registerAssetImage(input: RegisterAssetImageInput!): RegisterAssetImageSuccess!
+  verifySchemaCustomDomain(input: VerifySchemaCustomDomainInput!): VerifySchemaCustomDomainSuccess!
+  createProfile(input: CreateProfileInput!): CreateProfileSuccess
+  deleteProfile(input: DeleteProfileInput!): DeleteProfileSuccess!
+  selectProfile(input: SelectProfileInput!): SelectProfileSuccess!
+  unselectProfile(input: UnselectProfileInput!): UnselectProfileSuccess!
+  updateProfileDisplayName(input: UpdateProfileDisplayNameInput!): UpdateProfileDisplayNameSuccess
+  setProfileAvatar(input: SetProfileAvatarInput!): SetProfileAvatarSuccess
+  unsetProfileAvatar(input: UnsetProfileAvatarInput!): UnsetProfileAvatarSuccess!
+  setProfileDescription(input: SetProfileDescriptionInput!): SetProfileDescriptionSuccess
+  updateAdditionalProperty(input: UpdateProfileAdditionalPropertyInput!): UpdateProfileAdditionalPropertySuccess
+  removeAdditionalProperty(input: RemoveProfileAdditionalPropertyInput!): RemoveProfileAdditionalPropertySuccess
+  updateAccountAdditionalProperty(input: UpdateAccountAdditionalPropertyInput!): UpdateAccountAdditionalPropertySuccess
+  removeAccountAdditionalProperty(input: RemoveAccountAdditionalPropertyInput!): RemoveAccountAdditionalPropertySuccess
+  updateAssetProfile(input: UpdateAssetProfileInput!): UpdateAssetProfileSuccess
+}
+
+
+type NFTAssetLink implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  parentLink: Asset
+  childLinks: [Link!]!
+}
+
+
+type NFTAssetOwnership implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  """NFT Owner"""
+  owner: Account!
+}
+
+
+type Namespace implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  url: Url!
+  schemas(before: String, after: String, first: Float = 10, last: Float): SchemasConnection!
+}
+
+
+type NamespaceEdge {
+  node: Namespace!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type NamespacesConnection {
+  pageInfo: PageInfo!
+  edges: [NamespaceEdge!]!
+  total: Float
+}
+
+
+type OffChainAsset implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  assetId: String!
+  creatorId: String!
+  tokenId: String
+  creatorCollectionId: String!
+  type: String!
+}
+
+
+type OffChainAssetEdge {
+  node: OffChainAsset!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type OffChainAssetsConnection {
+  pageInfo: PageInfo!
+  edges: [OffChainAssetEdge!]!
+  total: Float
+}
+
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  nextPage: String
+}
+
+
+type Profile implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  owner: ChainAddress!
+  profileId: String!
+  displayName: String!
+  avatar: Avatar!
+  properties: ProfileProperties!
+  additionalProperties: JSONObject!
+}
+
+
+type ProfileExperience implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  owner: ChainAddress!
+  experience: String!
+  profileId: String!
+}
+
+
+type ProfileProperties {
+  description: String
+}
+
+
+type Query {
+  getAssetTree(input: AssetTreeInput!): AssetTreeResponse! @deprecated
+  assetTree(input: AssetTreeInput!): AssetTree @deprecated
+  getNonceForChainAddress(input: NonceInput!): Int!
+  getTransaction(input: GetTransactionInput!): GetTransactionResponse! @deprecated
+  node(id: String!): Node!
+  namespaces(before: String, after: String, first: Float = 10, last: Float): NamespacesConnection!
+  namespace(namespace: Url!): Namespace
+  domains(before: String, after: String, first: Float = 10, last: Float): DomainsConnection!
+  transaction(transactionHash: TransactionHash!): Transaction
+  transactions(address: ChainAddress!, before: String, after: String, first: Float = 10, last: Float): TransactionsConnection
+  offChainAsset(tokenId: String, collectionId: CollectionId!): OffChainAsset
+  offChainAssets(input: OffChainAssetsInput!, before: String, after: String, first: Float = 10, last: Float): OffChainAssetsConnection!
+  tokenSchemas(collectionId: CollectionId!, before: String, after: String, first: Float = 10, last: Float): TokenSchemasConnection!
+  tokenSchema(tokenId: String, collectionId: CollectionId!): TokenSchema!
+  webhookEndpoints(before: String, after: String, first: Float = 10, last: Float): WebhookEndpointsConnection!
+  webhookEndpoint(webhookId: String!): WebhookEndpoint!
+  webhookSubscriptions(webhookId: String!, before: String, after: String, first: Float = 10, last: Float): WebhookSubscriptionConnection!
+  webhookSubscription(subscriptionId: String!): WebhookSubscription!
+  asset(tokenId: String!, collectionId: CollectionId!): Asset
+  assets(removeDuplicates: Boolean, sort: [Sort!], filter: AssetFilter, schemaId: SchemaIdentifier, collectionIds: [CollectionId!], addresses: [ChainAddress!], before: String, after: String, first: Float = 10, last: Float, chainId: ChainId, chainType: ChainType): AssetConnection
+  assetsByIds(assetIds: [AssetInput!]): [Asset!]
+  collectionsBySchema(schemaId: SchemaIdentifier!): [Collection!]
+  collections(before: String, after: String, first: Float = 10, last: Float, addresses: [ChainAddress!]!): CollectionConnection!
+  genericTokenBalances(filter: GenericTokenFilter, addresses: [ChainAddress!]!, genericTokenIds: [GenericTokenId!]): [GenericTokenBalance!]!
+  schemaCustomDomain(domainName: String!): SchemaCustomDomain
+  assetImages(collectionId: CollectionId!, before: String, after: String, first: Float = 10, last: Float): AssetImagesConnection!
+  accounts(addresses: [ChainAddress!]!): [Account!]!
+  owners(collectionIds: [CollectionId!]!, before: String, after: String, first: Float = 10, last: Float): AssetOwnersConnection!
+  inventoryAssets(before: String, after: String, first: Float = 10, last: Float, owner: ChainAddress!): InventoryAssetConnection
+}
+
+
+type RNS implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  name: RNSName!
+  asset: Asset!
+}
+
+
+type RegisterAssetImageSuccess {
+  assetImage: AssetImage!
+}
+
+
+type RegisterCollectionDelegationSuccess {
+  collectionDelegate: CollectionDelegate!
+}
+
+
+type RegisterOffChainAssetFailure {
+  errors: [AssetRegisterError!]!
+}
+
+
+type RegisterOffChainAssetSuccess {
+  offChainAsset: OffChainAsset!
+}
+
+
+type RegisterSchemaCustomDomainSuccess {
+  schemaCustomDomain: SchemaCustomDomain!
+}
+
+
+type RegisterTokenSchemaSuccess {
+  tokenSchema: TokenSchema!
+}
+
+
+type RemoveAccountAdditionalPropertySuccess {
+  account: Account!
+}
+
+
+type RemoveProfileAdditionalPropertySuccess {
+  profile: Profile!
+}
+
+
+type SFTAssetLink implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  parentLinks(addresses: [ChainAddress!]!): [Asset!]!
+}
+
+
+type SFTAssetOwnership implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  """SFT balance of an owner address"""
+  balanceOf(address: ChainAddress!): SFTBalance!
+  """SFT balances for a list of ownership addresses"""
+  balancesOf(addresses: [ChainAddress!]!): [SFTBalance!]!
+}
+
+
+type SFTBalance implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  """SFT balance of the owner"""
+  balance: Float!
+  """Owner of the SFT balance"""
+  owner: Account!
+}
+
+
+type Schema implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  namespace: Url!
+  version: Int!
+  name: String!
+  schema: String!
+}
+
+
+type SchemaCollectionFailure {
+  errors: [SchemaError!]!
+}
+
+
+type SchemaCollectionSuccess {
+  collectionId: CollectionId!
+  schemaIdentifier: SchemaIdentifier!
+  version: Float!
+}
+
+
+type SchemaCustomDomain implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  domainName: String!
+  createdBy: ChainAddress!
+  sslCertificate: SslCertificate
+  cloudfront: cloudFrontDistribution
+}
+
+
+type SchemaEdge {
+  node: Schema!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type SchemaError implements ErrorInterface {
+  message: String!
+}
+
+
+type SchemasConnection {
+  pageInfo: PageInfo!
+  edges: [SchemaEdge!]!
+  total: Float
+}
+
+
+type SelectProfileSuccess {
+  profileExperience: ProfileExperience!
+}
+
+
+type SetProfileAvatarSuccess {
+  profile: Profile!
+}
+
+
+type SetProfileDescriptionSuccess {
+  profile: Profile!
+}
+
+
+type SslCertificate {
+  cnameName: String!
+  cnameValue: String!
+  status: String!
+}
+
+
+type SubmitTransactionSuccess {
+  transactionHash: String!
+}
+
+
+type TokenSchema implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  collectionId: CollectionId!
+  tokenId: String
+  schemaId: String!
+  version: Float!
+}
+
+
+type TokenSchemaEdge {
+  node: TokenSchema!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type TokenSchemasConnection {
+  pageInfo: PageInfo!
+  edges: [TokenSchemaEdge!]!
+  total: Float
+}
+
+
+type Transaction {
+  """A globally unique ID of the object."""
+  id: ID!
+  transactionHash: String!
+  status: String!
+  createdAt: Float!
+  events: [TransactionEvent!]!
+  error: TransactionError
+}
+
+
+type TransactionEdge {
+  node: Transaction!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type TransactionError {
+  message: String!
+  code: Float!
+}
+
+
+type TransactionEvent {
+  args: [String!]!
+  type: String!
+  action: String!
+}
+
+
+type TransactionsConnection {
+  pageInfo: PageInfo!
+  edges: [TransactionEdge!]!
+  total: Float
+}
+
+
+type UnselectProfileSuccess {
+  success: Boolean!
+}
+
+
+type UnsetProfileAvatarSuccess {
+  success: Boolean!
+}
+
+
+type UpdateAccountAdditionalPropertySuccess {
+  account: Account!
+}
+
+
+type UpdateAssetProfileSuccess {
+  asset: Asset!
+}
+
+
+type UpdateProfileAdditionalPropertySuccess {
+  profile: Profile!
+}
+
+
+type UpdateProfileDisplayNameSuccess {
+  profile: Profile!
+}
+
+
+type UpdateWebhookEndpointSuccess {
+  webhookEndpoint: WebhookEndpoint!
+}
+
+
+type VerifySchemaCustomDomainSuccess {
+  status: String!
+}
+
+
+type WebhookEndpoint implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  webhookId: String!
+  subscriber: ChainAddress!
+  url: String!
+  apiKey: String!
+  retries: Float!
+  createdAt: Float!
+}
+
+
+type WebhookEndpointEdge {
+  node: WebhookEndpoint!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type WebhookEndpointsConnection {
+  pageInfo: PageInfo!
+  edges: [WebhookEndpointEdge!]!
+  total: Float
+}
+
+
+type WebhookSubscription implements Node {
+  """A globally unique ID of the object."""
+  id: ID!
+  subscriptionId: String!
+  webhookId: String!
+  type: String!
+  actions: [String!]!
+  collectionId: CollectionId!
+  createdAt: Float!
+}
+
+
+type WebhookSubscriptionConnection {
+  pageInfo: PageInfo!
+  edges: [WebhookSubscriptionEdge!]!
+  total: Float
+}
+
+
+type WebhookSubscriptionEdge {
+  node: WebhookSubscription!
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+
+type cloudFrontDistribution {
+  url: String!
+  status: String!
+}
+
+"""AssetTransactionMessage"""
+scalar AssetTransactionMessage
+
+"""The `Boolean` scalar type represents `true` or `false`."""
+scalar Boolean
+
+"""ChainAddress"""
+scalar ChainAddress
+
+"""ChainId"""
+scalar ChainId
+
+"""ChainType"""
+scalar ChainType
+
+"""CollectionId"""
+scalar CollectionId
+
+"""CollectionLocation"""
+scalar CollectionLocation
+
+"""The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point)."""
+scalar Float
+
+"""Generic token id"""
+scalar GenericTokenId
+
+"""GenericTokenLocation"""
+scalar GenericTokenLocation
+
+"""The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID."""
+scalar ID
+
+"""The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1."""
+scalar Int
+
+"""JSONLD custom scalar type"""
+scalar JSONLD
+
+"""The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."""
+scalar JSONObject
+
+"""MetadataAttributes"""
+scalar MetadataAttributes
+
+"""MetadataProperties"""
+scalar MetadataProperties
+
+"""MetadataRawAttributes"""
+scalar MetadataRawAttributes
+
+"""Profiles"""
+scalar Profiles
+
+"""Custom scalar type for string or number"""
+scalar PropertyValue
+
+"""RNS Name"""
+scalar RNSName
+
+"""SchemaIdentifier"""
+scalar SchemaIdentifier
+
+"""Signature"""
+scalar Signature
+
+"""The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text."""
+scalar String
+
+"""Transaction Hash"""
+scalar TransactionHash
+
+"""Namespace URL"""
+scalar Url
+
+
+union AssetLink = SFTAssetLink | NFTAssetLink
+
+
+union AssetOperationResponse = AssetOperationResultSuccess | AssetOperationResultFailure
+
+
+union AssetOwnership = SFTAssetOwnership | NFTAssetOwnership
+
+
+union AssetTreeResponse = AssetTreeResultSuccess | AssetTreeResultFailure
+
+
+union CreateSchemaResponse = CreateSchemaSuccess | CreateSchemaFailure
+
+
+union GetTransactionResponse = GetTransactionResponseSuccess | GetTransactionResponseFailure
+
+
+union RegisterOffChainAssetUnion = RegisterOffChainAssetSuccess | RegisterOffChainAssetFailure
+
+
+union SchemaCollectionResponse = SchemaCollectionSuccess | SchemaCollectionFailure
+

@@ -1,0 +1,230 @@
+generated: '2026-08-16'
+method: derived
+source: >-
+  graphql/futureverse-asset-register.graphql — the reflected SDL of
+  https://ar-api.futureverse.app/graphql (186 types), plus the terminology and how-it-works pages at
+  https://docs.therootnetwork.com/asset-register/terminology and
+  https://docs.therootnetwork.com/asset-register/how-it-works.
+scope: >-
+  Entity-relationship graph of the Asset Register. FuturePass and the Root Network node RPC have no
+  published object model of their own; RootRewards' four objects are covered inline at the bottom.
+
+identifiers:
+  did:
+    format: 'did:fv-asset:<chainId>:<chainType>:<contractAddress>:<tokenId>'
+    example: 'did:fv-asset:1:evm:0x6bca6de2dbdc4e0d41f7273011785ea16ba47182:1000'
+    note: >-
+      Every asset in the register is addressed by a Futureverse asset DID. This is the join key
+      across chains and is what makes an asset-to-asset link possible between an Ethereum NFT and a
+      Root Network SFT.
+  collection_id:
+    format: '<chainId>:<chainType>:<contractAddress>'
+    example: '1:evm:0x6bca6de2dbdc4e0d41f7273011785ea16ba47182'
+  scalars:
+    - ChainId
+    - ChainType
+    - ChainAddress
+    - CollectionId
+    - SchemaIdentifier
+    - TransactionHash
+    - RNSName
+    - Url
+    - JSONLD
+
+pagination:
+  style: relay-cursor
+  evidence: >-
+    Ten *Connection types with edges/node/PageInfo (hasNextPage, hasPreviousPage, startCursor,
+    endCursor) and a Node interface with a node(id) root field. The docs state the API "is fully
+    Relay specification compliant".
+
+entities:
+  - name: Asset
+    kind: core
+    description: >-
+      An on-chain NFT (ERC-721) or SFT (ERC-1155) known to the register, addressed by its asset DID.
+    relationships:
+      - {to: Collection, type: belongs_to, via: collectionId}
+      - {to: Schema, type: has_one, via: schema}
+      - {to: AssetTree, type: has_one, via: assetTree}
+      - {to: Metadata, type: has_one, via: metadata}
+      - {to: AssetOwnership, type: has_one, via: ownership}
+      - {to: AssetLink, type: has_many, via: links}
+      - {to: Profiles, type: has_many, via: profiles}
+  - name: Collection
+    kind: core
+    description: A contract-level grouping of assets on a specific chain.
+    relationships:
+      - {to: Schema, type: has_one, via: schema}
+      - {to: CollectionLocation, type: has_one, via: location}
+      - {to: Asset, type: has_many, via: 'Query.collections / Query.assets(collectionId)'}
+      - {to: CollectionDelegate, type: has_many, via: registerCollectionDelegation}
+  - name: Schema
+    kind: core
+    description: >-
+      The validation contract for an asset's metadata. Schemas live under a Namespace and are what
+      make the register interoperable — an application can ask what an asset IS before using it.
+    relationships:
+      - {to: Namespace, type: belongs_to, via: namespace}
+      - {to: Collection, type: has_many, via: 'Query.collectionsBySchema'}
+      - {to: SchemaCustomDomain, type: has_one, via: schemaCustomDomain}
+  - name: Namespace
+    kind: core
+    description: URL-rooted namespace that owns a set of schemas.
+    relationships:
+      - {to: Schema, type: has_many, via: schemas}
+  - name: AssetTree
+    kind: core
+    description: >-
+      The JSON-LD document produced by resolving an asset plus everything linked to it. This is the
+      register's headline read: one call returns the composed asset.
+    relationships:
+      - {to: Asset, type: belongs_to, via: 'Query.assetTree(tokenId, collectionId)'}
+  - name: Link
+    kind: core
+    description: >-
+      An explicit, signed relationship between two assets (ASSET_LINK or INVENTORY_LINK), created
+      and deleted only through a signed Asset Register transaction. Paths under a parent are unique
+      and an asset may have only one parent.
+    relationships:
+      - {to: Asset, type: has_one, via: asset}
+      - {to: OffChainAsset, type: has_one, via: offChainAsset}
+      - {to: AssetLinkType, type: has_one, via: linkType}
+  - name: OffChainAsset
+    kind: core
+    description: >-
+      An asset held in an off-chain database whose ownership is managed by its creator, registered
+      so it can participate in links alongside on-chain assets.
+    relationships:
+      - {to: Link, type: has_many, via: 'Link.offChainAsset'}
+  - name: Account
+    kind: identity
+    description: >-
+      A chain account as the register sees it — the bridge object between an EOA, a FuturePass smart
+      wallet, an RNS name and one or more profiles.
+    relationships:
+      - {to: ChainAddress, type: has_one, via: address}
+      - {to: ChainAddress, type: has_one, via: eoa}
+      - {to: ChainAddress, type: has_one, via: futurepass}
+      - {to: RNS, type: has_one, via: rns}
+      - {to: Profile, type: has_many, via: profiles}
+      - {to: Profile, type: has_one, via: lastUsedProfileByExperience}
+  - name: Profile
+    kind: identity
+    description: >-
+      A named persona owned by an account, with a display name, description, avatar asset and
+      arbitrary additional properties. Selectable per experience.
+    relationships:
+      - {to: Account, type: belongs_to, via: owner}
+      - {to: Avatar, type: has_one, via: avatar}
+      - {to: ProfileProperties, type: has_one, via: properties}
+  - name: Avatar
+    kind: identity
+    relationships:
+      - {to: Asset, type: has_one, via: asset}
+  - name: ProfileExperience
+    kind: identity
+    description: Which profile an account has selected inside a given experience/application.
+    relationships:
+      - {to: ChainAddress, type: belongs_to, via: owner}
+  - name: RNS
+    kind: identity
+    description: Root Name Service name bound to an asset and surfaced on an account.
+    relationships:
+      - {to: Asset, type: has_one, via: asset}
+  - name: Metadata
+    kind: descriptive
+    relationships:
+      - {to: MetadataProperties, type: has_one, via: properties}
+      - {to: MetadataAttributes, type: has_one, via: attributes}
+      - {to: MetadataRawAttributes, type: has_one, via: rawAttributes}
+  - name: AssetOwnership
+    kind: descriptive
+    description: Union of NFTAssetOwnership (single owner) and SFTAssetOwnership (balances).
+    relationships:
+      - {to: Account, type: has_one, via: 'NFTAssetOwnership.owner'}
+      - {to: SFTBalance, type: has_many, via: 'SFTAssetOwnership.balancesOf'}
+  - name: GenericToken
+    kind: descriptive
+    description: A fungible token the register tracks balances for.
+    relationships:
+      - {to: GenericTokenBalance, type: has_many, via: 'Query.genericTokenBalances'}
+  - name: GenericTokenBalance
+    kind: descriptive
+    relationships:
+      - {to: Account, type: belongs_to, via: owner}
+      - {to: GenericToken, type: has_one, via: genericToken}
+  - name: InventoryAsset
+    kind: core
+    description: >-
+      An asset viewed through the inventory projection — same identity plus a parentLink, used for
+      equip/unequip style relationships.
+    relationships:
+      - {to: Collection, type: belongs_to, via: collectionId}
+      - {to: InventoryParentLink, type: has_one, via: parentLink}
+  - name: Transaction
+    kind: ledger
+    description: >-
+      A signed Asset Register transaction and the events it emitted. Queryable by hash; the docs
+      note a block explorer could be built on this data.
+    relationships:
+      - {to: TransactionEvent, type: has_many, via: events}
+      - {to: TransactionError, type: has_one, via: error}
+  - name: TokenSchema
+    kind: schema-management
+    relationships:
+      - {to: Collection, type: belongs_to, via: collectionId}
+  - name: SchemaCustomDomain
+    kind: schema-management
+    description: >-
+      A customer-owned domain serving a schema, with an ACM SSL certificate and a CloudFront
+      distribution modelled directly in the public schema.
+    relationships:
+      - {to: SslCertificate, type: has_one, via: sslCertificate}
+      - {to: cloudFrontDistribution, type: has_one, via: cloudfront}
+  - name: AssetImage
+    kind: media
+    relationships:
+      - {to: Collection, type: belongs_to, via: collectionId}
+  - name: WebhookEndpoint
+    kind: events
+    description: A subscriber URL plus a minted delivery API key and a retry budget (max 20).
+    relationships:
+      - {to: ChainAddress, type: belongs_to, via: subscriber}
+      - {to: WebhookSubscription, type: has_many, via: webhookId}
+  - name: WebhookSubscription
+    kind: events
+    description: An event type + actions + collection filter bound to a webhook endpoint.
+    relationships:
+      - {to: WebhookEndpoint, type: belongs_to, via: webhookId}
+      - {to: Collection, type: belongs_to, via: collectionId}
+
+result_pattern:
+  style: union-of-success-and-failure
+  detail: >-
+    Nearly every mutation returns a union of a *Success and a *Failure type rather than a nullable
+    payload plus top-level GraphQL errors. There are 27 *Success types and a matching family of
+    *Failure/*Error types. That is a deliberate, typed error contract — good for clients, and it
+    means HTTP status codes carry almost no information on this API.
+  see: errors/futureverse-problem-types.yml
+
+rootrewards_objects:
+  source: openapi/futureverse-rootrewards-quest-api-openapi.yml
+  entities:
+    - name: Campaign
+      relationships: [{to: Quest, type: has_many, via: quests}]
+    - name: Quest
+      relationships:
+        - {to: Campaign, type: belongs_to, via: campaign_id}
+        - {to: Payout, type: has_many, via: payouts}
+    - name: Payout
+      relationships: [{to: Account, type: belongs_to, via: 'account.pass (FuturePass address)'}]
+  note: >-
+    Campaigns group quests for presentation only. Points budgets and allocations live entirely at
+    the quest level.
+
+counts:
+  graphql_types: 186
+  object_types: 109
+  entities_modelled: 25
+  connections: 10

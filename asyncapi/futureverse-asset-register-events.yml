@@ -1,0 +1,119 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  https://docs.therootnetwork.com/asset-register/guides/subscriptions (HTTP 200) and the webhook
+  types in graphql/futureverse-asset-register.graphql (WebhookEndpoint, WebhookSubscription and
+  their five mutations, reflected live from https://ar-api.futureverse.app/graphql).
+type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Futureverse publishes no AsyncAPI document. Probed 2026-08-16:
+  docs.therootnetwork.com/asyncapi.yaml 404, /asyncapi.json 404, /events 404, /webhooks 404;
+  ar-api.futureverse.app/asyncapi.yaml 403 (CloudFront edge deny on every non-/graphql path). The
+  docs host's own llms.txt index of 125 pages lists no event-schema page. This artifact is the
+  webhook catalog transcribed from the Subscriptions guide plus the live GraphQL management
+  surface; it is NOT a fabricated AsyncAPI.
+
+surface:
+  name: Asset Register Subscription Service
+  transport: webhook
+  protocol: HTTPS POST
+  managed_via: https://ar-api.futureverse.app/graphql
+  docs: https://docs.therootnetwork.com/asset-register/guides/subscriptions
+
+security:
+  outbound_header: API_KEY
+  detail: >-
+    Every delivery carries an API_KEY header minted by createWebhookEndpoint and returned on the
+    WebhookEndpoint.apiKey field, so a subscriber can verify the request originated with the
+    Subscription Service.
+  signature: none
+  timestamp: none
+  gap: >-
+    A static shared secret is not a signature. There is no HMAC over the body and no timestamp, so a
+    subscriber cannot detect replay of a captured delivery, and rotating the secret means recreating
+    the endpoint.
+
+delivery:
+  retry_policy:
+    retried_on: [409, 429, '5xx']
+    not_retried_on: ['1xx', '2xx', '3xx', '4xx except 429']
+    max_retries: 20
+    configurable_field: WebhookEndpoint.retries
+    retry_after: >-
+      The service reads the subscriber's standard Retry-After response header and takes the more
+      conservative of that value and its own policy. A negative Retry-After suppresses the retry.
+  ordering: not documented
+  deduplication: not documented
+  replay_api: none
+
+payload:
+  description: >-
+    A subscriber receives the FULL transaction containing the event it subscribed to, not a
+    narrowed event object.
+  shape:
+    status: 'SUCCESS | (failure statuses per errors/futureverse-problem-types.yml)'
+    signature: string
+    message: string
+    events:
+      - type: string
+        action: string
+        args: [string]
+        collectionId: string
+  example_source: https://docs.therootnetwork.com/asset-register/guides/subscriptions
+  example:
+    status: SUCCESS
+    signature: '0x00'
+    message: ''
+    events:
+      - type: asset-link
+        action: delete
+        args:
+          - equipWith_asmBrain
+          - 'did:fv-asset:1:evm:0x6bca6de2dbdc4e0d41f7273011785ea16ba47182:1000'
+          - 'did:fv-asset:1:evm:0x1ea66a857de297471bc12dd12d93853ff6617284:200'
+        collectionId: '1:evm:0x6bca6de2dbdc4e0d41f7273011785ea16ba47182'
+
+events:
+  - type: asset-link
+    actions: [create, delete]
+    filter: collectionId
+    description: >-
+      An asset-to-asset link was created or deleted on a collection the subscriber filtered on. The
+      args carry the link path and the parent and child asset DIDs.
+    documented: true
+  - type: '(other event types)'
+    actions: []
+    documented: false
+    note: >-
+      The guide documents `asset-link` by example and says only "additional mutations for managing
+      endpoints are available... refer to the GraphQL playground". No complete event-type catalog is
+      published, and WebhookSubscription.type is a plain String in the SDL rather than an enum, so
+      the full set of subscribable events cannot be enumerated from the machine surface either.
+      This is the biggest documentation gap on the Futureverse event surface and it is recorded as
+      an honest unknown, not guessed.
+
+management_operations:
+  queries:
+    - webhookEndpoint
+    - webhookEndpoints
+    - webhookSubscription
+    - webhookSubscriptions
+  mutations:
+    - createWebhookEndpoint
+    - updateWebhookEndpoint
+    - deleteWebhookEndpoint
+    - createWebhookSubscription
+    - deleteWebhookSubscription
+  auth: SIWE bearer token (admin functionality)
+
+subscription_input:
+  type: string
+  actions: '[create, delete]'
+  collectionId: '<chainId>:<chainType>:<contract>'
+  webhookId: uuid returned by createWebhookEndpoint
+
+counts:
+  documented_event_types: 1
+  documented_actions: 2
+  management_operations: 9

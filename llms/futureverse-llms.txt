@@ -1,0 +1,125 @@
+# The Root Network
+
+## Docs
+
+- [The Root Network](https://docs.therootnetwork.com/intro.md): At the heart of the network infrastructure and protocols in the open metaverse is The Root Network (TRN).
+- [Tokenomics](https://docs.therootnetwork.com/learn/tokenomics.md): The Root Network (TRN) has unique features that differentiate its tokenomics from other blockchains. Specifically: The Root Network is an any-token gas blockchain to simplify user onboarding. Currently, users can transact in XRP, ROOT, ASTO, and SYLO. More approved tokens will be available in future…
+- [Glossary](https://docs.therootnetwork.com/learn/glossary.md)
+- [Any-token Gas](https://docs.therootnetwork.com/learn/features/any-token-gas.md)
+- [EVM Smart Contract](https://docs.therootnetwork.com/learn/features/EVM-smart-contract.md)
+- [Identity and Smart Wallet Protocols](https://docs.therootnetwork.com/learn/features/identity-protocol.md)
+- [Decentralized Exchange](https://docs.therootnetwork.com/learn/features/decentralized-exchange.md)
+- [On-Chain Assets](https://docs.therootnetwork.com/learn/features/on-chain-assets.md)
+- [On-Chain Collectibles Protocol](https://docs.therootnetwork.com/learn/features/on-chain-collectibles-protocol.md)
+- [Staking Protocol](https://docs.therootnetwork.com/learn/features/staking-protocol.md)
+- [Ethereum bridge](https://docs.therootnetwork.com/learn/features/ethereum-bridge.md)
+- [XRPL Bridge](https://docs.therootnetwork.com/learn/features/xrpl-bridge.md)
+- [Use MetaMask with the Portal](https://docs.therootnetwork.com/learn/how-to/use-metamask-with-portal.md)
+- [Create a Fungible Asset](https://docs.therootnetwork.com/learn/how-to/create-fungible-asset.md)
+- [How to buy ROOT tokens](https://docs.therootnetwork.com/learn/how-to/how-to-buy-root.md)
+- [How to Stake](https://docs.therootnetwork.com/learn/how-to/how-to-stake.md)
+- [How to create and mint NFT/SFT?](https://docs.therootnetwork.com/learn/how-to/how-to-create-and-mint-nft-sft.md)
+- [Getting Started](https://docs.therootnetwork.com/build/getting-started.md)
+- [Connecting to The Root Network](https://docs.therootnetwork.com/build/connecting-to-the-root-network.md)
+- [Test Faucet](https://docs.therootnetwork.com/build/test-faucet.md): Access tokens for testing your dapps on The Root Network.
+- [Curated Examples](https://docs.therootnetwork.com/build/examples.md): Explore real-world use cases and examples to help you get started quickly.
+- [Mainnet Rootscan Explorer](https://docs.therootnetwork.com/build/rootscan-explorer.md): Track transactions and activity on The Root Network mainnet.
+- [Testnet Rootscan Explorer](https://docs.therootnetwork.com/build/testnet-rootscan-explorer.md): Monitor and debug your dapps on The Root Network testnet before deploying to production.
+- [Install Native API](https://docs.therootnetwork.com/build/substrate/api-package.md)
+- [Building with Native API](https://docs.therootnetwork.com/build/substrate/core-concepts.md)
+- [Primitives](https://docs.therootnetwork.com/build/substrate/cookbook/primitives.md)
+- [Tokens](https://docs.therootnetwork.com/build/substrate/cookbook/tokens.md)
+- [JSON-RPC](https://docs.therootnetwork.com/build/substrate/api-reference/json-rpc.md)
+- [Assets](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/assets.md)
+- [AssetsExt](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/assetsext.md)
+- [Authorship](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/authorship.md)
+- [Babe](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/babe.md)
+- [Balances](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/balances.md)
+- [Dex](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/dex.md)
+- [Echo](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/echo.md)
+- [ElectionProviderMultiPhase](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/electionprovidermultiphase.md)
+- [Erc20Peg](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/erc20peg.md)
+- [EthBridge](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/ethbridge.md)
+- [Ethereum](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/ethereum.md)
+- [Evm](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/evm.md)
+- [EvmChainId](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/evmchainid.md)
+- [FeeControl](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/feecontrol.md)
+- [FeeProxy](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/feeproxy.md)
+- [FuturePass](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/futurepass.md)
+- [Grandpa](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/grandpa.md)
+- [Historical](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/historical.md)
+- [ImOnline](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/imonline.md)
+- [LiquidityPools](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/liquiditypool.md)
+- [MaintenanceMode](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/maintenancemode.md)
+- [Marketplace](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/marketplace.md)
+- [Multisig](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/multisig.md)
+- [NFI](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/nfi.md)
+- [NFT](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/nft.md)
+- [NftPeg](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/nftpeg.md)
+- [Offences](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/offences.md)
+- [Preimage](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/preimage.md)
+- [Recovery](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/recovery.md)
+- [Proxy](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/proxy.md)
+- [Scheduler](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/scheduler.md)
+- [Session](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/session.md)
+- [Sft](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/sft.md)
+- [Staking](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/staking.md)
+- [Sudo](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/sudo.md)
+- [System](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/system.md)
+- [SyloDataPermissions](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/sylo-data-permissions.md)
+- [SyloActionPermissions](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/sylo-action-permissions.md)
+- [SyloDataVerification](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/sylo-data-verification.md)
+- [Timestamp](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/timestamp.md)
+- [TokenApprovals](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/tokenapprovals.md)
+- [TransactionPayment](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/transactionpayment.md)
+- [TxFeePot](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/txfeepot.md)
+- [Utility](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/utility.md)
+- [VortexDistribution](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/vortexdistribution.md)
+- [VoterList](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/voterlist.md)
+- [Xls20](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/xls20.md)
+- [XrplBridge](https://docs.therootnetwork.com/build/substrate/api-reference/runtime-pallets/xrplbridge.md)
+- [Install EVM API](https://docs.therootnetwork.com/build/evm/evm-package.md)
+- [Building with EVM API](https://docs.therootnetwork.com/build/evm/ethereum-vs-trn.md)
+- [Decentralized Exchange](https://docs.therootnetwork.com/build/evm/runtime-precompiles/decentralized-exchange.md)
+- [Assets (ERC-20)](https://docs.therootnetwork.com/build/evm/runtime-precompiles/assets-erc-20.md)
+- [NFT (ERC-721)](https://docs.therootnetwork.com/build/evm/runtime-precompiles/nft-erc-721.md)
+- [SFT (ERC-1155)](https://docs.therootnetwork.com/build/evm/runtime-precompiles/sft-erc-1155.md)
+- [FeeProxy](https://docs.therootnetwork.com/build/evm/runtime-precompiles/feeproxy.md)
+- [FuturePass](https://docs.therootnetwork.com/build/evm/runtime-precompiles/futurepass.md)
+- [How do I deploy a smart contract on The Root Network using hardhat?](https://docs.therootnetwork.com/build/evm/cookbook/smart-contract.md)
+- [Tokens](https://docs.therootnetwork.com/build/evm/cookbook/tokens.md)
+- [Running a Node](https://docs.therootnetwork.com/participate/running-a-node.md)
+- [Become a Validator](https://docs.therootnetwork.com/participate/validator-guide/become-a-validator.md)
+- [Upgrade Instructions](https://docs.therootnetwork.com/participate/validator-guide/upgrade-instructions.md)
+- [Update Validator Commission](https://docs.therootnetwork.com/participate/validator-guide/update-validator-commission.md)
+- [Best Practices to Avoid Slashing](https://docs.therootnetwork.com/participate/validator-guide/best-practices.md)
+- [Overview](https://docs.therootnetwork.com/pricing-sylo/overview.md): Pricing Sylo provides an easy way to retrieve external token prices in your smart contract.
+- [Oracle Contract](https://docs.therootnetwork.com/pricing-sylo/oracle-contract.md)
+- [Integration (Typescript)](https://docs.therootnetwork.com/pricing-sylo/integration-typescript.md): Interacting with the Oracle contract directly is a common use case, one of the possible methods to interact with this contract is illustrated below.
+- [Supported Exchanges](https://docs.therootnetwork.com/pricing-sylo/supported-exchanges.md): Learn about the sources that the Pricing Sylo uses to retrieve token price data.
+- [Data Feeds](https://docs.therootnetwork.com/pricing-sylo/data-feeds.md)
+- [FAQs](https://docs.therootnetwork.com/pricing-sylo/faqs.md)
+- [Changelog](https://docs.therootnetwork.com/changelog.md)
+- [Introduction](https://docs.therootnetwork.com/asset-register/introduction.md): The Asset Register is where you manage assets across applications in the open metaverse.
+- [Getting Started](https://docs.therootnetwork.com/asset-register/getting-started.md): Learning how to use the Assets API
+- [Authentication](https://docs.therootnetwork.com/asset-register/authentication.md): There are two different types of authentication required based on the functionality you are trying to access. This guide will explain to you what they are and show you how to use them.
+- [Terminology](https://docs.therootnetwork.com/asset-register/terminology.md): The Asset Register documentation introduces new terminology to describe its usage. A brief review of this document before exploring guides will help you understand them better.
+- [How it works](https://docs.therootnetwork.com/asset-register/how-it-works.md)
+- [Schema Management](https://docs.therootnetwork.com/asset-register/guides/schema-management/creating-schemas.md)
+- [Register Asset with Schema](https://docs.therootnetwork.com/asset-register/guides/schema-management/register-asset-with-schema.md): Link a collection or specific token to a schema so the Asset Registry can validate and generate the Asset Tree.
+- [Example](https://docs.therootnetwork.com/asset-register/guides/schema-management/example.md): Example of Assets with Schemas
+- [How to Schema](https://docs.therootnetwork.com/asset-register/guides/how-to-schema.md): This guide will take you through registering schemas that are compliant with the Asset Register.
+- [Asset Register Transaction](https://docs.therootnetwork.com/asset-register/guides/asset-register-transaction.md): Transactions are made to the Asset Register using a messaging standard designed to be human readable and familiar to blockchain users using the Ethereum message standard.
+- [Asset Link Operations](https://docs.therootnetwork.com/asset-register/guides/asset-link-operations.md): Asset links can only be executed through a transaction. This guide will specifically focus on creating these operations using the SDKs.
+- [View Asset Tree](https://docs.therootnetwork.com/asset-register/guides/view-asset-tree.md): This guide will go into detail about querying the asset tree.
+- [Off-Chain Assets](https://docs.therootnetwork.com/asset-register/guides/off-chain-assets.md): Off-chain assets, as the name implies, lives on an off-chain database and ownership is managed by the creator.
+- [Subscriptions](https://docs.therootnetwork.com/asset-register/guides/subscriptions.md): Like a blockchain, Asset Register is event driven and therefore subscribers must be given real time feedback on what is happening so they can react to them.
+- [Error Messages](https://docs.therootnetwork.com/asset-register/guides/error-messages.md): This section explains the error codes that can occur during a transaction and the scenarios in which they might happen. These codes help identify the specific reason a transaction failed.
+- [Overview](https://docs.therootnetwork.com/rootrewards/overview.md): Introduction to RootRewards and its key features
+- [RootRewards Quest API](https://docs.therootnetwork.com/rootrewards/api-reference.md): Complete API documentation for RootRewards integration
+- [Testing Instructions](https://docs.therootnetwork.com/rootrewards/testing-instructions.md): This section explains how builders test the RootRewards Quest API on **staging** using the official endpoints. It aligns with the team’s approach of **API-only testing** with provided FuturePass addresses (no staging UI access required)
+
+## Optional
+
+- [Community](https://discord.gg/TheRootNetwork)
+- [Blog](https://www.therootnetwork.com/blog)

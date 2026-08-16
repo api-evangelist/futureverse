@@ -1,0 +1,37 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  Searched every reachable Futureverse surface for a pricing or plans page on 2026-08-16. The
+  documentation index at https://docs.therootnetwork.com/llms.txt (HTTP 200) enumerates all 125
+  published pages and contains no pricing, plans, billing or quota page. The corporate site that
+  would normally carry one is unreachable.
+docs: null
+
+plan_count: 0
+pricing_model: none-published
+
+note: >-
+  Futureverse publishes no plans, no price list, no free-tier definition and no quota. This is not a
+  "contact sales" gate either — there is no sales page to contact. The only monetary primitives
+  documented anywhere are on-chain: gas paid in any approved token (XRP, ROOT, ASTO, SYLO), NFT/SFT
+  mint fees set per collection by an admin extrinsic, and network-enforced royalties. Access to the
+  Asset Register is free and anonymous for reads; access to RootRewards is granted by application
+  approval with no published commercial terms.
+
+evidence:
+  - {url: 'https://docs.therootnetwork.com/llms.txt', status: 200, finding: '125-page index; no pricing/plans/billing page'}
+  - {url: 'https://www.futureverse.com/', status: 0, finding: 'TLS handshake failure — corporate site unreachable, so no pricing page can exist there'}
+  - {url: 'https://www.therootnetwork.com/', status: 404, finding: 'site removed; every path 404s'}
+  - {url: 'https://docs.futureverse.com/', status: 0, finding: 'NXDOMAIN — the former developer portal is gone'}
+  - {url: 'https://docs.therootnetwork.com/rootrewards/api-reference', status: 200, finding: 'access is by application approval; no price, quota or commercial term is stated'}
+
+access_model:
+  asset_register_read: free, anonymous
+  asset_register_write: 'free at the API; costs are on-chain gas paid by the signing wallet'
+  futurepass: no published commercial terms
+  rootrewards: application approval only; no published commercial terms
+  node_rpc: >-
+    free and anonymous, with a documented warning that the public endpoints are "not for sustained
+    or business use" and a recommendation to run a node or buy third-party RPC
+
+plans: []

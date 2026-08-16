@@ -1,0 +1,171 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  https://docs.therootnetwork.com/asset-register/authentication (HTTP 200),
+  https://docs.therootnetwork.com/rootrewards/api-reference (HTTP 200), and the live OIDC discovery
+  document at https://login.futureverse.app/.well-known/openid-configuration (HTTP 200, saved to
+  well-known/futureverse-openid-configuration.json). Baseline first derived from
+  openapi/futureverse-rootrewards-quest-api-openapi.yml, then upgraded from the docs and the live
+  discovery document.
+docs: https://docs.therootnetwork.com/asset-register/authentication
+
+summary:
+  types:
+    - openIdConnect
+    - oauth2
+    - apiKey
+    - http
+  api_key_in:
+    - header
+  note: >-
+    Three products, three unrelated auth models. Nothing is shared: an OIDC access token from
+    FuturePass is not accepted by the Asset Register, and neither is accepted by RootRewards.
+
+schemes:
+  - name: futurePassOpenIdConnect
+    type: openIdConnect
+    api: FuturePass Identity (OpenID Connect)
+    openIdConnectUrl: https://login.futureverse.app/.well-known/openid-configuration
+    issuer: https://login.futureverse.app
+    endpoints:
+      authorization: https://login.futureverse.app/auth
+      token: https://login.futureverse.app/token
+      userinfo: https://login.futureverse.app/me
+      introspection: https://login.futureverse.app/token/introspection
+      revocation: https://login.futureverse.app/token/revocation
+      end_session: https://login.futureverse.app/session/end
+      pushed_authorization_request: https://login.futureverse.app/request
+      jwks: https://login.futureverse.app/.well-known/jwks.json
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+      - client_credentials
+      - 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+    response_types:
+      - code
+      - code id_token
+      - id_token
+      - none
+    response_modes: [form_post, fragment, query, web_message]
+    pkce: [S256]
+    client_auth_methods:
+      - client_secret_basic
+      - client_secret_jwt
+      - client_secret_post
+      - private_key_jwt
+      - none
+    id_token_signing_alg: [RS256]
+    token_endpoint_auth_signing_algs: [HS256, RS256, PS256, ES256, EdDSA]
+    scopes: [openid, offline_access]
+    claims:
+      - sub
+      - iss
+      - sid
+      - auth_time
+      - email
+      - profile
+      - eoa
+      - custodian
+      - chainId
+      - futurepass
+      - connectorId
+      - passName
+    notes:
+      - >-
+        The custom claims are the interesting part: `futurepass` carries the smart-wallet address,
+        `eoa` the externally-owned account behind it, `custodian` the custody provider, `chainId`
+        the network, and `connectorId`/`passName` the social/wallet connector used. That is a
+        deliberate bridge from an OIDC subject to an on-chain identity.
+      - >-
+        No /.well-known/oauth-authorization-server and no /.well-known/oauth-protected-resource are
+        served (both 404), so the provider is discoverable as OIDC but not as an RFC 8414 / RFC 9728
+        OAuth server. That matters for MCP clients, which look for those two documents.
+      - >-
+        `claims_parameter_supported` is false and `request_parameter_supported` is false; PAR is
+        supported instead.
+    client_libraries:
+      - '@futureverse/auth'
+      - '@futureverse/auth-react'
+      - '@futureverse/auth-react-native'
+      - '@futureverse/next-auth'
+      - '@futureverse/oidc-client'
+
+  - name: assetRegisterSiwe
+    type: http
+    scheme: bearer
+    api: Futureverse Asset Register API
+    in: header
+    parameter: Authorization
+    description: >-
+      Admin ("🔒") functionality on the Asset Register GraphQL API is authenticated with a
+      Sign-In-With-Ethereum (SIWE, EIP-4361) token placed in the Authorization header. Futureverse
+      publishes a browser helper that produces the header value after a wallet signature.
+    token_helper: https://ar-docs.futureverse.app/siwe-generator/
+    covers:
+      - createSchema
+      - registerCollection
+      - registerTokenSchema
+      - registerSchemaCustomDomain
+      - verifySchemaCustomDomain
+      - createNamespace
+      - createWebhookEndpoint
+      - updateWebhookEndpoint
+      - deleteWebhookEndpoint
+      - createWebhookSubscription
+      - deleteWebhookSubscription
+    note: >-
+      Introspection and most reads are anonymous — an unauthenticated POST to
+      https://ar-api.futureverse.app/graphql returned the full 186-type schema on 2026-08-16.
+
+  - name: assetRegisterWalletSignature
+    type: http
+    scheme: signature
+    api: Futureverse Asset Register API
+    description: >-
+      Asset Register state changes ("🔑") are not authenticated by a token at all. They are
+      submitted as a signed Asset Rights Token Metadata (ARTM) message — a human-readable message
+      following the Ethereum message standard, signed by the asset owner's wallet and submitted via
+      the submitTransaction / assetMutation mutations. Replay protection is a per-address nonce
+      fetched with the getNonceForChainAddress query.
+    nonce_query: getNonceForChainAddress
+    message_format: ARTM (Asset Rights Token Metadata)
+    library: '@futureverse/artm'
+    docs: https://docs.therootnetwork.com/asset-register/guides/asset-register-transaction
+
+  - name: questApiKey
+    type: apiKey
+    api: RootRewards Quest API
+    in: header
+    parameter: x-api-key
+    key_prefix: sk_
+    description: >-
+      Quest API key, prefixed `sk_`, bound to the quest owner account. Required on GET
+      /quests/{questId} and POST /quests/{questId}; NOT required on GET /quests or GET
+      /campaigns/{id}. Issued privately on Quest-application approval.
+    sources:
+      - openapi/futureverse-rootrewards-quest-api-openapi.yml
+      - https://docs.therootnetwork.com/rootrewards/api-reference
+
+  - name: webhookDeliveryApiKey
+    type: apiKey
+    api: Futureverse Asset Register API
+    in: header
+    parameter: API_KEY
+    direction: inbound-to-subscriber
+    description: >-
+      When the Asset Register Subscription Service POSTs an event to a subscriber's webhook
+      endpoint, it sets an API_KEY header so the subscriber can verify the request origin. The key
+      is minted by createWebhookEndpoint and returned as the `apiKey` field.
+    note: >-
+      This is a shared-secret header, not a signed payload — there is no HMAC signature scheme
+      (no Stripe-style `t=…,v1=…` header and no timestamp), so a subscriber cannot detect replay.
+    docs: https://docs.therootnetwork.com/asset-register/guides/subscriptions
+
+  - name: nodeRpcAnonymous
+    type: none
+    api: The Root Network Node RPC
+    description: >-
+      The public archive nodes at root.rootnet.live and porcini.rootnet.app accept anonymous
+      JSON-RPC POSTs. The documentation warns they are "not for sustained or business use" and
+      recommends running a node or using a third-party RPC service.

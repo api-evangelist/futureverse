@@ -1,0 +1,82 @@
+generated: '2026-08-16'
+method: probed
+status: published
+source: https://docs.therootnetwork.com/mcp
+note: >-
+  Found by probing the developer documentation host, not by a vendor announcement — Futureverse
+  publishes no MCP page. An anonymous POST of {"jsonrpc":"2.0","id":1,"method":"tools/list"} to
+  https://docs.therootnetwork.com/mcp returned HTTP 200 with a real text/event-stream response
+  carrying three tools and their inputSchemas. The raw response is saved verbatim to
+  mcp/futureverse-mcp-tools-list.json.
+
+deployment:
+  mode: remote
+  endpoint: https://docs.therootnetwork.com/mcp
+  auth: none
+  verified: probed
+
+server:
+  name: The Root Network
+  version: '1.0.0'
+  transport: streamable-http
+  url: https://docs.therootnetwork.com/mcp
+  protocol_version: '2025-06-18'
+  platform: >-
+    Mintlify-hosted documentation MCP server. This is a DOCUMENTATION agent surface, not a product
+    API surface — it searches and reads the docs corpus; it cannot call the Asset Register,
+    FuturePass or RootRewards APIs.
+  instructions_excerpt: >-
+    "This Model Context Protocol server provides search and retrieval tools for the The Root Network
+    site. Use it to answer questions from public site content."
+
+x-evidence:
+  fetched: '2026-08-16'
+  initialize_status: 200
+  tools_list_status: 200
+  content_type: text/event-stream
+  anonymous: true
+  oauth_challenge: false
+  alternate_path_checked: https://docs.therootnetwork.com/api/mcp
+  alternate_path_status: 405
+
+tool_count: 3
+tools:
+  - name: search_the_root_network
+    title: Search documentation
+    category: docs-search
+    description: >-
+      Search across The Root Network knowledge base for information, code examples, API references
+      and guides; returns contextual content with titles and direct documentation links.
+    input_schema:
+      query: {type: string, required: true, description: Search query}
+    annotations: {readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false}
+  - name: query_docs_filesystem_the_root_network
+    category: docs-read
+    description: >-
+      Read-only shell-like query against a virtualized in-memory filesystem containing only the
+      documentation pages. Supports rg, grep, find, tree, ls, cat, head, tail, stat, wc, sort,
+      uniq, cut, sed, awk, jq. Stateless per call; output truncated to 30KB.
+    input_schema:
+      command: {type: string, required: true, description: Shell-like read-only command}
+  - name: submit_feedback
+    title: Submit documentation feedback
+    category: feedback
+    description: >-
+      Report a problem with a documentation page (incorrect, outdated, confusing or incomplete) to
+      the docs team.
+    input_schema:
+      path: {type: string, required: true}
+      feedback: {type: string, required: true}
+
+local_stdio: none
+note_local: >-
+  No first-party stdio MCP package exists. Nothing under the @futureverse or @therootnetwork npm
+  scopes is an MCP server (see packages/futureverse-packages.yml); the newest publish in either
+  scope is 2025-09-16.
+
+gaps:
+  - The three product APIs Futureverse actually ships — the Asset Register GraphQL API, the
+    FuturePass OIDC provider, and the RootRewards Quest REST API — have NO MCP surface. An agent can
+    read Futureverse's documentation through MCP but cannot act against any Futureverse system.
+  - No /.well-known/oauth-protected-resource or /.well-known/oauth-authorization-server is served on
+    the MCP host (both 404), which is expected for an unauthenticated server.

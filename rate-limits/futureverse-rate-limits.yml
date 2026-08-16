@@ -1,0 +1,71 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  Searched the full 125-page documentation index at https://docs.therootnetwork.com/llms.txt
+  (HTTP 200) and read every API-reference page it lists for the Asset Register, RootRewards and the
+  node RPC. Also inspected live response headers from anonymous calls to
+  https://ar-api.futureverse.app/graphql and https://root.rootnet.live/archive on 2026-08-16.
+docs: null
+
+limit_count: 0
+headers_published: false
+headers_observed: false
+
+note: >-
+  Futureverse documents no rate limits and returns no rate-limit headers. There is no X-RateLimit-*,
+  no RateLimit-* (IETF draft), no Retry-After and no documented 429 behaviour on any of its APIs. A
+  client has no way to know its budget before it is throttled and no runtime signal when it is —
+  which is the harder problem for an agent, because an agent cannot read a docs page mid-loop.
+
+limits: []
+
+what_is_published_instead:
+  - surface: The Root Network Node RPC
+    statement: >-
+      "The Root Network RPC servers are not for sustained or business use, and they may become
+      unavailable at anytime. You should run your node or use an RPC Service like Rootscan RPC for
+      regular use."
+    source: https://docs.therootnetwork.com/build/connecting-to-the-root-network
+    reading: >-
+      A prose disclaimer in place of a limit. It sets no number, so it cannot be respected
+      programmatically — it can only be obeyed by not using the endpoint.
+  - surface: Root Network runtime
+    statement: >-
+      Throughput is bounded at the protocol level instead: MAXIMUM_BLOCK_WEIGHT of 1s and
+      BLOCK_GAS_LIMIT of 15,000,000 as of runtime v8.56.0.
+    source: https://docs.therootnetwork.com/changelog
+    reading: >-
+      A consensus parameter, not an API quota. It constrains the chain, not a caller's key.
+
+inverted_signal:
+  finding: >-
+    Futureverse CONSUMES the rate-limit signal it does not emit. Its webhook Subscription Service
+    retries deliveries that fail with 429 and reads the subscriber's standard Retry-After header,
+    taking the more conservative of that value and its own policy. The provider expects integrators
+    to speak a runtime backpressure protocol that the provider's own APIs do not speak back.
+  source: https://docs.therootnetwork.com/asset-register/guides/subscriptions
+
+related_quotas:
+  - name: webhook endpoint retries
+    value: 20
+    scope: per webhook endpoint
+    detail: >-
+      WebhookEndpoint.retries is configurable and capped at 20. The only published numeric limit
+      anywhere in the Futureverse surface — and it governs Futureverse's own outbound behaviour, not
+      an inbound caller.
+    source: https://docs.therootnetwork.com/asset-register/guides/subscriptions
+  - name: RootRewards payout page size
+    value: 20
+    scope: per GET /quests/{questId} request
+    detail: Default `limit` on the payouts collection. A pagination default, not a rate limit.
+
+evidence:
+  - url: 'https://ar-api.futureverse.app/graphql'
+    status: 200
+    finding: >-
+      No RateLimit-*, X-RateLimit-* or Retry-After header on an anonymous 200 introspection
+      response. Headers actually returned: x-powered-by Express, x-cache/x-amz-cf-* (CloudFront),
+      x-xss-protection, x-frame-options SAMEORIGIN, x-content-type-options nosniff,
+      strict-transport-security max-age=31536000.
+  - {url: 'https://root.rootnet.live/archive', status: 200, finding: 'no rate-limit headers on an anonymous eth_chainId JSON-RPC response'}
+  - {url: 'https://docs.therootnetwork.com/llms.txt', status: 200, finding: 'no rate-limit, quota or throttling page among the 125 indexed pages'}

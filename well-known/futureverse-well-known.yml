@@ -1,0 +1,196 @@
+generated: '2026-08-16'
+method: probed
+source: >-
+  Anonymous HTTPS GET of each /.well-known/ path against every Futureverse host named in this
+  repo's apis.yml plus the developer documentation host.
+note: >-
+  Two REAL documents were served: a complete OpenID Connect discovery document from the FuturePass
+  identity provider (login.futureverse.app) and an A2A Agent Card from the developer documentation
+  host (docs.therootnetwork.com). No security.txt is served anywhere, so no SecurityTxt pointer is
+  emitted. The Asset Register API host (ar-api.futureverse.app) answers 403 from CloudFront on
+  EVERY /.well-known/ path — that is an edge deny, not a document, and is recorded as a miss.
+  The corporate host www.futureverse.com could not be probed at all: it fails the TLS handshake
+  ("tlsv1 alert internal error" from the Webflow proxy) and docs.futureverse.com no longer has a
+  DNS record, both consistent with the company's September 2025 receivership.
+
+hosts:
+  - host: login.futureverse.app
+    role: FuturePass identity provider (OpenID Connect)
+    paths:
+      - path: /.well-known/openid-configuration
+        status: 200
+        content_type: application/json
+        file: futureverse-openid-configuration.json
+        document: true
+        note: >-
+          Full OIDC discovery document. issuer https://login.futureverse.app; authorization, token,
+          userinfo, introspection, revocation, end_session and PAR endpoints all present; PKCE S256;
+          scopes_supported [openid, offline_access]; custom claims eoa, custodian, chainId,
+          futurepass, connectorId, passName.
+      - path: /.well-known/jwks.json
+        status: 200
+        content_type: application/jwk-set+json
+        file: null
+        document: true
+        note: >-
+          Live JWK set referenced by jwks_uri. Not saved to this repo — signing keys rotate and a
+          snapshot would be misleading; fetch it live from the URL in the discovery document.
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        document: false
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        document: false
+      - path: /.well-known/security.txt
+        status: 404
+        document: false
+      - path: /.well-known/api-catalog
+        status: 404
+        document: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        document: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        document: false
+      - path: /llms.txt
+        status: 404
+        document: false
+
+  - host: docs.therootnetwork.com
+    role: Developer documentation for The Root Network, the Asset Register and RootRewards
+    paths:
+      - path: /.well-known/agent-card.json
+        status: 200
+        content_type: application/json
+        file: ../a2a/futureverse-agent-card.json
+        document: true
+        note: >-
+          Real A2A Agent Card (name "The Root Network", protocolVersion 0.3). Graded in
+          a2a/futureverse-a2a.yml. The legacy /.well-known/agent.json path returns 404.
+      - path: /.well-known/agent.json
+        status: 404
+        document: false
+      - path: /llms.txt
+        status: 200
+        content_type: text/plain
+        file: ../llms/futureverse-llms.txt
+        document: true
+        note: 14,425-byte documentation index listing 125 pages. Saved verbatim.
+      - path: /llms-full.txt
+        status: 200
+        content_type: text/plain
+        file: null
+        document: true
+        note: >-
+          751,734-byte full documentation dump. Deliberately NOT committed — *-llms-full.txt is
+          gitignored in this repo because verbatim docs dumps carry secret-shaped example tokens.
+      - path: /.well-known/security.txt
+        status: 404
+        document: false
+      - path: /.well-known/openid-configuration
+        status: 404
+        document: false
+        note: Returns the site's HTML 404 page, not a document.
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        document: false
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        document: false
+      - path: /.well-known/api-catalog
+        status: 404
+        document: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        document: false
+
+  - host: ar-api.futureverse.app
+    role: Asset Register GraphQL API (production)
+    note: >-
+      CloudFront returns 403 "Request blocked" for every path except POST /graphql. Not a document
+      on any path.
+    paths:
+      - path: /.well-known/security.txt
+        status: 403
+        document: false
+      - path: /.well-known/openid-configuration
+        status: 403
+        document: false
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+        document: false
+      - path: /.well-known/oauth-protected-resource
+        status: 403
+        document: false
+      - path: /.well-known/api-catalog
+        status: 403
+        document: false
+      - path: /.well-known/ai-plugin.json
+        status: 403
+        document: false
+      - path: /.well-known/agent-card.json
+        status: 403
+        document: false
+      - path: /llms.txt
+        status: 403
+        document: false
+
+  - host: root.rootnet.live
+    role: The Root Network mainnet archive node (JSON-RPC / EVM RPC)
+    note: >-
+      The node answers 405 "Method not allowed" for GET on every path — it accepts JSON-RPC POSTs
+      only. No /.well-known/ surface exists.
+    paths:
+      - path: /.well-known/security.txt
+        status: 405
+        document: false
+      - path: /.well-known/openid-configuration
+        status: 405
+        document: false
+      - path: /.well-known/oauth-authorization-server
+        status: 405
+        document: false
+      - path: /.well-known/oauth-protected-resource
+        status: 405
+        document: false
+      - path: /.well-known/api-catalog
+        status: 405
+        document: false
+      - path: /.well-known/ai-plugin.json
+        status: 405
+        document: false
+      - path: /.well-known/agent-card.json
+        status: 405
+        document: false
+      - path: /llms.txt
+        status: 405
+        document: false
+
+  - host: www.futureverse.com
+    role: Corporate website (unreachable)
+    note: >-
+      Not probeable. HTTP 301s to HTTPS; the HTTPS handshake fails with
+      "tlsv1 alert internal error" from the Webflow edge — the certificate for this hostname is no
+      longer served. Recorded as a probe failure against the host, not as an absence of documents.
+    paths:
+      - path: 'https://www.futureverse.com/'
+        status: 0
+        document: false
+        note: TLS handshake failure (curl exit 35).
+
+  - host: docs.futureverse.com
+    role: Former developer documentation host (gone)
+    note: >-
+      No DNS record. The host that every Futureverse SDK guide and search result still points at
+      does not resolve; its Asset Register content now lives under docs.therootnetwork.com.
+    paths:
+      - path: 'https://docs.futureverse.com/'
+        status: 0
+        document: false
+        note: DNS NXDOMAIN.
+
+summary:
+  paths_probed: 47
+  documents_found: 4
+  hosts_unreachable: 2

@@ -1,0 +1,146 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  https://docs.therootnetwork.com/asset-register/getting-started (HTTP 200),
+  https://docs.therootnetwork.com/build/connecting-to-the-root-network (HTTP 200),
+  https://docs.therootnetwork.com/build/test-faucet (HTTP 200),
+  https://docs.therootnetwork.com/rootrewards/testing-instructions (HTTP 200).
+docs: https://docs.therootnetwork.com/build/test-faucet
+
+summary: >-
+  Futureverse ships a genuine, separately-hosted test environment: a staging Asset Register on its
+  own domain, two non-production chains with their own chain IDs and block explorers, and a token
+  faucet. What it does not ship is any self-serve path into RootRewards testing — that is a
+  human-approval gate.
+
+environments:
+  - name: Production
+    chain: Root (mainnet)
+    chain_id: 7668
+    currency: XRP
+    asset_register_graphql: https://ar-api.futureverse.app/graphql
+    native_rpc_ws: wss://root.rootnet.live/archive/ws
+    evm_rpc: https://root.rootnet.live/archive
+    explorer: https://rootscan.io
+    also_covers: Ethereum Mainnet
+  - name: Staging / Testnet
+    chain: Porcini
+    chain_id: 7672
+    currency: XRP
+    asset_register_graphql: https://ar-api.futureverse.cloud/graphql
+    native_rpc_ws: wss://porcini.rootnet.app/archive/ws
+    evm_rpc: https://porcini.rootnet.app/archive
+    explorer: https://porcini.rootscan.io
+    also_covers: Goerli
+    probes:
+      - {url: 'https://ar-api.futureverse.cloud/graphql', method: POST, status: 200, note: 'staging Asset Register is LIVE — anonymous introspection succeeded'}
+      - {url: 'https://porcini.rootnet.app/archive', method: POST, status: 0, note: 'eth_chainId POST TIMED OUT after 25s — the documented Porcini testnet EVM RPC is not answering'}
+  - name: Devnet
+    chain: Sprout-1
+    chain_id: 17672
+    currency: XRP
+    native_rpc_ws: wss://porcini.devnet.rootnet.app/ws
+    evm_rpc: https://porcini.devnet.rootnet.app
+    explorer: https://devnet-porcini.rootscan.io/
+    probes:
+      - {url: 'https://porcini.devnet.rootnet.app', method: POST, status: 0, note: 'DNS could not resolve the host — the documented devnet no longer exists'}
+
+environment_health:
+  probed: '2026-08-16'
+  finding: >-
+    The documented test environments have decayed unevenly. The staging Asset Register GraphQL
+    endpoint is fully live and introspectable. The Porcini testnet EVM RPC times out, and the
+    Sprout-1 devnet host does not resolve at all — so a developer following the published
+    "Connecting to The Root Network" page to set up a test chain will fail on two of the three
+    documented networks. Mainnet is healthy: a POST of eth_chainId to
+    https://root.rootnet.live/archive returned 0x1df4 (7668), matching the documented chain ID.
+
+environment_separation:
+  style: separate-hostname-and-chain
+  detail: >-
+    Test and live are separated by DNS and by chain ID, not by a key prefix or a mode flag —
+    ar-api.futureverse.cloud versus ar-api.futureverse.app. A client cannot accidentally point a
+    test key at production because the token is a wallet signature over a chain-scoped message, not
+    a mode-scoped secret.
+
+key_prefixes:
+  - product: RootRewards Quest API
+    prefix: sk_
+    scope: both staging and production
+    note: >-
+      One prefix for both environments. Unlike a Stripe-style sk_test_/sk_live_ split, an sk_ key
+      does not tell its holder which environment it belongs to.
+  - product: Asset Register
+    prefix: null
+    note: No API keys. Auth is a SIWE token or a wallet signature.
+  - product: FuturePass
+    prefix: null
+    note: Standard OIDC client credentials; no published sandbox issuer.
+
+test_assets:
+  faucet:
+    published: true
+    docs: https://docs.therootnetwork.com/build/test-faucet
+    description: Access tokens for testing dapps on The Root Network.
+  test_cards: null
+  test_bank_accounts: null
+  hosted_test_tokens: null
+  note: >-
+    Not a payments API — there are no test card numbers or test bank accounts to record. The
+    equivalent primitive is faucet-issued testnet tokens.
+
+rootrewards_testing:
+  self_serve: false
+  gate: >-
+    "You will receive the Base URL, API key, and testing instructions when your Quest application is
+    approved." Staging FuturePass addresses are supplied by Futureverse — one or more WITH a
+    RootRewards account for success cases, one WITHOUT for error handling.
+  builder_limitations:
+    - Builders cannot self-serve create quests on staging.
+    - Testing is API-only; no staging UI access is granted or required.
+  documented_negative_tests:
+    - {case: account not found, method: allocate to the "no RootRewards account" test address, expected: 400}
+    - {case: quest not active, method: allocate outside the quest start/end window, expected: 400}
+    - {case: insufficient points, method: allocate more than points_remaining, expected: 400}
+    - {case: unauthorized, method: omit or alter x-api-key, expected: 401}
+    - {case: quest not found, method: use an invalid questId, expected: 404}
+  note: >-
+    Publishing an explicit negative-test matrix with expected status codes is better testing
+    documentation than most providers ship. It is undermined by the fact that four of the five cases
+    all return an undifferentiated 400.
+
+time_simulation:
+  test_clocks: false
+  detail: >-
+    No test clock or time-travel facility. Quest start/end windows and the "current active earning
+    period" can only be exercised by waiting or by having Futureverse reconfigure the quest.
+
+fixtures_and_triggers:
+  fixture_tooling: false
+  event_triggers: false
+  detail: >-
+    No CLI or dashboard trigger for firing a test webhook. To exercise the Asset Register
+    Subscription Service a developer must perform a real signed transaction on Porcini.
+
+tooling:
+  graphql_playground:
+    available: true
+    detail: >-
+      The Subscriptions guide tells developers to "refer to the GraphQL playground by navigating to
+      the GraphQL URL in your browser" to discover the complete mutation set. A browser GET of
+      https://ar-api.futureverse.app/graphql returned 400 on 2026-08-16, so the playground UI does
+      not appear to be served at that path any more even though introspection over POST still works.
+  siwe_generator:
+    url: https://ar-docs.futureverse.app/siwe-generator/
+    status: 200
+    detail: >-
+      Browser helper that produces the Authorization header value after a wallet signature. Live on
+      2026-08-16.
+  asset_register_dev_portal:
+    url: https://ar-docs.futureverse.app/
+    status: 200
+    title: Asset Register Dev Portal
+    detail: >-
+      A separate Next.js developer portal for the Asset Register, still live on a futureverse.app
+      host, distinct from the Mintlify documentation at docs.therootnetwork.com. It is a
+      JavaScript-rendered single-page app, so its content is not machine-readable to a fetcher.

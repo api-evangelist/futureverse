@@ -1,0 +1,138 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  Live probes of every Futureverse host on 2026-08-16 (recorded below with status codes);
+  https://docs.therootnetwork.com/changelog (HTTP 200);
+  https://docs.therootnetwork.com/build/connecting-to-the-root-network (HTTP 200); npm registry
+  metadata for 35 first-party packages; and public reporting on the company's insolvency
+  (cryptocurrency.org.nz, businessdesk.co.nz, web3isgoinggreat.com).
+
+headline: >-
+  Futureverse Corporation Limited was placed in receivership on 2025-09-30 and into liquidation
+  following the 2025-12-16 watershed meeting. The corporate website and the original developer
+  documentation host are both gone. The APIs are not: the Asset Register GraphQL endpoint, the
+  FuturePass OIDC provider, the mainnet RPC nodes, the documentation site and 35 npm packages all
+  answered on 2026-08-16. This is a company that has stopped shipping but has not switched off.
+
+corporate_status:
+  state: liquidation
+  receivership_date: '2025-09-30'
+  receivers: Brendon Gibson, Neale Jackson and Daniel Stoneman (Calibre Partners)
+  administrators: Andrew Grenfell and Kare Johnstone (McGrathNicol)
+  liquidation_meeting: '2025-12-16'
+  secured_lender: 50T Holdings (formerly Roundtable Partners), which called in its general security deed
+  scope_note: >-
+    Public reporting states the restructuring affects Futureverse Corporation and not its
+    subsidiaries, that The Root Network "operates independently from Futureverse Corporation" and
+    "remains operational", and that the Pass, Asset Register, staking dashboard and RootRewards were
+    to continue. Read every artifact in this repo against that split: the product surfaces are still
+    up, the corporate shell that shipped them is not.
+  method: searched
+  confidence: high
+
+host_health:
+  probed: '2026-08-16'
+  live:
+    - {url: 'https://ar-api.futureverse.app/graphql', status: 200, note: 'anonymous GraphQL introspection succeeded; 186 types returned'}
+    - {url: 'https://ar-api.futureverse.cloud/graphql', status: 400, note: 'staging endpoint reachable; 400 on GET, expects POST'}
+    - {url: 'https://login.futureverse.app/.well-known/openid-configuration', status: 200, note: full OIDC discovery document}
+    - {url: 'https://docs.therootnetwork.com/intro', status: 200, note: Mintlify documentation site}
+    - {url: 'https://docs.therootnetwork.com/mcp', status: 200, note: 'remote MCP server, 3 tools, unauthenticated'}
+    - {url: 'https://root.rootnet.live/', status: 405, note: 'mainnet archive node; JSON-RPC POST only'}
+    - {url: 'https://rootscan.io/', status: 200, note: block explorer (third-party operated)}
+  degraded_or_gone:
+    - {url: 'https://www.futureverse.com/', status: 0, note: 'TLS handshake fails — "tlsv1 alert internal error" from the Webflow edge. HTTP 301s to HTTPS, which then cannot complete. The corporate site is unreachable.'}
+    - {url: 'https://futureverse.com/', status: 0, note: same TLS failure on the apex}
+    - {url: 'https://docs.futureverse.com/', status: 0, note: 'NXDOMAIN. The developer documentation host that every SDK guide, search result and blog post still points at no longer resolves.'}
+    - {url: 'https://www.therootnetwork.com/', status: 404, note: 'host resolves and serves, but every path including / and /blog returns 404 — the Webflow site was removed'}
+    - {url: 'https://portal.rootnet.cloud/', status: 402, note: 'HTTP 402 Payment Required — the Root Network Portal the docs tell developers to start with is returning a billing-failure status'}
+    - {url: 'https://github.com/futureversecom', status: 404, note: 'the GitHub organization is gone; github.com/therootnetwork and github.com/futureverseai also 404'}
+  do_not_confuse:
+    - url: 'https://github.com/futureverse'
+      note: >-
+        This is NOT the company. It is "futureverse", the R parallelization framework
+        (futureverse.org). Do not wire it as a GitHubOrganization pointer.
+
+versioning:
+  root_network:
+    scheme: 'Substrate runtime spec version (v<spec>.<impl>.<patch>)'
+    current: v10.68.0
+    current_date: '2025-02-12'
+    mechanism: forkless runtime upgrades
+  asset_register:
+    scheme: none
+    detail: >-
+      https://ar-api.futureverse.app/graphql carries no version segment and the SDL exposes no
+      version field. GraphQL field deprecation would be the change signal; nothing in the reflected
+      schema is currently marked @deprecated.
+  rootrewards:
+    scheme: none
+    detail: No version segment in any documented path.
+  futurepass:
+    scheme: oidc-discovery
+    detail: Clients re-read /.well-known/openid-configuration rather than pinning endpoints.
+
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  detail: >-
+    No deprecation or sunset policy is published for any Futureverse API, and no RFC 8594
+    Sunset/Deprecation response headers are documented. What DOES exist is a track record of
+    deprecations announced only in the runtime changelog after the fact — NFT.add_user_tokens' sort
+    function removed in v10.67.0, the VortexDistribution `price` parameter "temporarily deprecated",
+    get_vault_account removed as obsolete, Futurepass migration code removed, the ETH bridge's
+    submit_challenge extrinsic disabled. Chain consumers learn about removals from release notes;
+    API consumers get no signal at all.
+  evidence: changelog/futureverse-changelog.yml
+
+sla:
+  published: false
+  detail: >-
+    No SLA, uptime commitment or support-response target is published. The only availability
+    statement in the documentation is a warning against relying on the public infrastructure:
+    "The Root Network RPC servers are not for sustained or business use, and they may become
+    unavailable at anytime. You should run your node or use an RPC Service like Rootscan RPC for
+    regular use."
+  source: https://docs.therootnetwork.com/build/connecting-to-the-root-network
+
+status_page:
+  published: false
+  probed:
+    - {url: 'https://status.futureverse.com/', status: 0, note: does not resolve}
+    - {url: 'https://status.therootnetwork.com/', status: 0, note: does not resolve}
+    - {url: 'https://futureverse.statuspage.io/', status: 200, note: 'FALSE POSITIVE — every *.statuspage.io hostname, including a nonsense control subdomain, redirects to Atlassian''s Statuspage marketing page. Not a status page.'}
+    - {url: 'https://therootnetwork.statuspage.io/', status: 200, note: same false positive}
+  conclusion: >-
+    No status page exists. No StatusPage pointer is emitted in apis.yml — the only 200s came from a
+    vendor catch-all, and crediting them would assert a status surface the provider does not serve.
+
+release_cadence:
+  runtime_last_release: '2025-03-03'
+  npm_last_publish: '2025-09-16'
+  npm_packages: 35
+  finding: >-
+    Two independent, provider-published, reliably-dated decay signals agree. The chain runtime has
+    not shipped a release in seventeen months. The npm scopes — the client libraries every
+    integrator depends on — have not published in eleven months, and the last publish landed two
+    weeks before the receivership. Seven packages are more than two years stale and three still
+    carry pre-release strings (0.0.0-pre-SM-337.x) as their `latest` dist-tag.
+  evidence:
+    - changelog/futureverse-changelog.yml
+    - packages/futureverse-packages.yml
+
+deprecated_operations:
+  derived_from: graphql/futureverse-asset-register.graphql
+  count: 0
+  note: >-
+    No field or enum value in the reflected Asset Register SDL carries @deprecated. Given the
+    company's state, absence of deprecation markers should be read as "nobody is maintaining the
+    schema", not as "the schema is stable".
+
+consumer_guidance: >-
+  Anything built on these APIs is running on infrastructure whose operating company is in
+  liquidation, with no SLA, no status page, no deprecation policy and no channel through which a
+  shutdown would be announced — the corporate site and GitHub org that would have carried such a
+  notice are already gone. The documentation host is the last surface still being served, and it is
+  a third-party SaaS (Mintlify) rather than provider-run infrastructure.

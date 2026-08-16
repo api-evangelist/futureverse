@@ -1,0 +1,406 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  npm registry metadata endpoints (registry.npmjs.org/<pkg>) queried directly for every package, on
+  2026-08-16. Package existence cross-checked against the Futureverse SDK documentation at
+  https://docs.therootnetwork.com/asset-register/getting-started and
+  https://docs.therootnetwork.com/build/substrate/api-package.
+first_party_basis: >-
+  Both npm scopes are first-party. The @futureverse scope's registry maintainers are
+  admin@futureverse.com, gareth.daines@futureverse.com and john@sylo.io (Sylo was one of the eleven
+  companies Futureverse rolled up), and the Asset Register documentation links directly to
+  npmjs.com/package/@futureverse/asset-register and @futureverse/asset-register-react as the
+  official SDKs.
+
+warning_do_not_confuse: >-
+  github.com/futureverse is NOT this company — it is "futureverse", the R parallelization framework
+  ("A Unifying Parallelization Framework in R for Everyone", futureverse.org). No Futureverse
+  (metaverse) GitHub organization is reachable: github.com/futureversecom, github.com/therootnetwork
+  and github.com/futureverseai all return HTTP 404. No source repository is linked from any npm
+  package's metadata either — every package's `repository` field is empty.
+
+currency_finding: >-
+  The newest publish across all 35 packages is 2025-09-16, eleven months before this probe and two
+  weeks before Futureverse was placed in receivership on 2025-09-30. Nothing has shipped since.
+  Seven packages have not been published in over two years, and three still carry pre-release
+  version strings (0.0.0-pre-SM-337.x) as their `latest` dist-tag.
+
+registries_checked:
+  - registry: npm
+    result: 35 first-party packages across two scopes.
+  - registry: pypi
+    result: none — pypi.org/pypi/futureverse/json and /therootnetwork/json both 404.
+  - registry: crates.io
+    result: none — crates.io search for "futureverse" returns 0 crates.
+  - registry: rubygems
+    result: none — rubygems.org/api/v1/gems/futureverse.json 404.
+  - registry: maven-central
+    result: none found.
+  - registry: nuget
+    result: none found.
+  - registry: pkg.go.dev
+    result: none found.
+
+package_count: 35
+official_count: 35
+
+packages:
+  # ---- FuturePass identity / authentication ----
+  - name: '@futureverse/auth'
+    registry: npm
+    language: typescript
+    official: true
+    category: authentication
+    version: 5.0.3
+    published: '2025-09-16'
+    version_count: 90
+    description: OpenID Connect authentication library for FuturePass.
+  - name: '@futureverse/auth-core'
+    registry: npm
+    language: typescript
+    official: true
+    category: authentication
+    version: 1.0.2
+    published: '2025-09-16'
+    version_count: 4
+    description: Common functionality and internals for Futureverse auth.
+  - name: '@futureverse/auth-react'
+    registry: npm
+    language: typescript
+    official: true
+    category: authentication
+    version: 5.0.4
+    published: '2025-09-16'
+    version_count: 134
+    description: React authentication provider for Futureverse Auth.
+  - name: '@futureverse/auth-react-native'
+    registry: npm
+    language: typescript
+    official: true
+    category: authentication
+    version: 1.1.2
+    published: '2025-09-16'
+    version_count: 21
+    description: React Native authentication components and providers for Futureverse Auth.
+  - name: '@futureverse/auth-ui'
+    registry: npm
+    language: typescript
+    official: true
+    category: ui-components
+    version: 1.0.7
+    published: '2025-09-16'
+    version_count: 166
+    description: Client-side React UI library providing customizable authentication surfaces.
+  - name: '@futureverse/next-auth'
+    registry: npm
+    language: typescript
+    official: true
+    category: authentication
+    version: 1.0.6
+    published: '2025-09-16'
+    version_count: 9
+    description: OAuth authentication provider for FuturePass with NextAuth.
+  - name: '@futureverse/oidc-client'
+    registry: npm
+    language: typescript
+    official: true
+    category: authentication
+    version: 0.1.3
+    published: '2023-11-22'
+    version_count: 8
+    description: Client for talking to the Futureverse OIDC provider.
+    note: Superseded by @futureverse/auth; last published nearly three years ago.
+
+  # ---- Asset Register ----
+  - name: '@futureverse/asset-register'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 2.82.0
+    published: '2025-08-29'
+    version_count: 134
+    description: >-
+      Core SDK for the Asset Register GraphQL API; Node.js and non-React framework environments.
+    api: Futureverse Asset Register API
+  - name: '@futureverse/asset-register-react'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 2.71.3
+    published: '2025-08-29'
+    version_count: 121
+    description: React provider/hook SDK for querying the Asset Register.
+    api: Futureverse Asset Register API
+  - name: '@futureverse/artm'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 2.3.2
+    published: '2025-05-26'
+    version_count: 75
+    description: >-
+      Asset Register Transaction Message (ARTM) — the standard human-readable message format signed
+      to submit Asset Register transactions.
+    api: Futureverse Asset Register API
+  - name: '@futureverse/swappable-viewer-react'
+    registry: npm
+    language: typescript
+    official: true
+    category: ui-components
+    version: 1.5.8
+    published: '2025-09-16'
+    version_count: 102
+    description: React wrapper around the Asset Register exposing swappable-asset viewer hooks.
+
+  # ---- Transactions / signing / EVM ----
+  - name: '@futureverse/transact'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 0.8.0
+    published: '2025-08-14'
+    version_count: 55
+    description: API to build and facilitate transactions on The Root Network.
+  - name: '@futureverse/transact-react'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 0.4.0
+    published: '2025-08-14'
+    version_count: 20
+    description: React bindings for @futureverse/transact.
+  - name: '@futureverse/signer'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.8.0
+    published: '2025-05-26'
+    version_count: 44
+    description: Signer interface with common methods for signing messages and transactions.
+  - name: '@futureverse/signer-core'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 0.3.0
+    published: '2025-05-26'
+    version_count: 12
+    description: Core internals for the Futureverse signer.
+  - name: '@futureverse/evm'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.1.0
+    published: '2025-04-17'
+    version_count: 9
+    description: Utility package that simplifies EVM development on The Root Network.
+  - name: '@futureverse/wagmi-connectors'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 4.0.4
+    published: '2025-09-16'
+    version_count: 126
+    description: Wagmi connector extensions for Futureverse wallets.
+  - name: '@futureverse/wallet-signer-etherjs'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.0.1
+    published: '2022-11-03'
+    version_count: 9
+    license: ISC
+    description: Futureverse wallet signer for ethers.js.
+    note: Last published 2022; nearly four years stale.
+
+  # ---- Sylo protocol ----
+  - name: '@futureverse/sylo-data-protocol'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 0.3.0
+    published: '2025-08-14'
+    version_count: 7
+    description: Sylo data protocol library.
+  - name: '@futureverse/sylo-protocol-sdk'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 0.0.0-pre-SM-337.1
+    published: '2024-05-31'
+    version_count: 48
+    license: ISC
+    description: >-
+      SDK for relaying messages between Ethereum-based accounts on The Root Network.
+    note: >-
+      The `latest` dist-tag is a pre-release string (0.0.0-pre-SM-337.1). There has never been a
+      stable release.
+  - name: '@futureverse/sylo-notifications-sdk'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 0.0.0-pre-SM-337.5
+    published: '2024-06-05'
+    version_count: 28
+    license: ISC
+    description: Broadcasting and subscribing to Sylo notifications.
+    note: '`latest` is a pre-release string; never stably released.'
+  - name: '@futureverse/sylo-protocol-abi'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.0.4-pre-1
+    published: '2024-05-02'
+    version_count: 11
+    license: ISC
+    description: Compiled ABIs for the Sylo protocol Ethereum contracts.
+    note: '`latest` is a pre-release string.'
+
+  # ---- Minting / viewers / UI ----
+  - name: '@futureverse/mint-sdk'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 2.0.0
+    published: '2024-06-07'
+    version_count: 17
+    description: Minting SDK.
+  - name: '@futureverse/mint-sdk-react'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 2.0.0
+    published: '2024-06-07'
+    version_count: 16
+    description: React bindings for the minting SDK.
+  - name: '@futureverse/component-library'
+    registry: npm
+    language: typescript
+    official: true
+    category: ui-components
+    version: 0.2.4
+    published: '2024-07-24'
+    version_count: 38
+    description: Futureverse shared React component library.
+  - name: '@futureverse/react-unity-viewer'
+    registry: npm
+    language: typescript
+    official: true
+    category: ui-components
+    version: 0.1.2
+    published: '2023-05-29'
+    version_count: 2
+    license: ISC
+    description: React component for embedding Unity WebGL builds.
+    note: Two versions only; last published 2023.
+
+  # ---- Internal tooling ----
+  - name: '@futureverse/nx-semantic-release-sync'
+    registry: npm
+    language: typescript
+    official: true
+    category: build-tooling
+    version: 0.12.1
+    published: '2024-05-14'
+    version_count: 20
+    description: Nx plugin for automated releases powered by semantic-release.
+    note: Internal release tooling, not a client SDK.
+
+  # ---- The Root Network scope ----
+  - name: '@therootnetwork/api'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.1.0
+    published: '2025-07-18'
+    version_count: 18
+    license: Apache-2.0
+    description: >-
+      Complements @polkadot/api to connect to and build on The Root Network (the "Native API").
+    api: The Root Network Node RPC
+  - name: '@therootnetwork/api-types'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.2.0
+    published: '2025-07-18'
+    version_count: 15
+    license: Apache-2.0
+    description: Type package supplementing @therootnetwork/api.
+  - name: '@therootnetwork/extrinsic'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 2.0.0
+    published: '2025-07-18'
+    version_count: 14
+    license: Apache-2.0
+    description: Simplifies submitting extrinsics on The Root Network.
+  - name: '@therootnetwork/evm'
+    registry: npm
+    language: typescript
+    official: true
+    category: sdk
+    version: 1.0.5
+    published: '2024-06-25'
+    version_count: 6
+    license: Apache-2.0
+    description: Simplifies EVM development on The Root Network.
+  - name: '@therootnetwork/doughnut-nodejs'
+    registry: npm
+    language: wasm
+    official: true
+    category: sdk
+    version: 0.1.2
+    published: '2024-02-20'
+    version_count: 3
+    license: UNLICENSED
+    description: JS/Wasm bindings for the Rust Doughnut permission-token codec.
+  - name: '@therootnetwork/doughnut-web'
+    registry: npm
+    language: wasm
+    official: true
+    category: sdk
+    version: 0.1.2
+    published: '2024-02-20'
+    version_count: 3
+    license: UNLICENSED
+    description: Browser JS/Wasm bindings for the Doughnut codec.
+  - name: '@therootnetwork/pact-nodejs'
+    registry: npm
+    language: wasm
+    official: true
+    category: sdk
+    version: 0.0.3
+    published: '2024-02-20'
+    version_count: 3
+    license: Apache-2.0
+    description: JS/Wasm bindings for the Rust TRN-Pact codec.
+  - name: '@therootnetwork/pact-web'
+    registry: npm
+    language: wasm
+    official: true
+    category: sdk
+    version: 0.0.3
+    published: '2024-02-20'
+    version_count: 3
+    license: Apache-2.0
+    description: Browser JS/Wasm bindings for the TRN-Pact codec.

@@ -1,0 +1,97 @@
+generated: '2026-08-16'
+method: searched
+source: >-
+  npm registry metadata for the @futureverse scope (registry.npmjs.org, 2026-08-16) plus the SDK
+  listings at https://docs.therootnetwork.com/asset-register/getting-started.
+scope: >-
+  Client-side, embeddable UI surfaces only. Data/transaction SDKs are catalogued separately in
+  packages/futureverse-packages.yml.
+distribution: npm only — no CDN build, no script tag, no hosted/prebuilt iframe surface is published.
+
+families:
+  - family: Authentication UI
+    description: >-
+      Drop-in login and wallet-connection surfaces for FuturePass. This is the component family
+      Futureverse invested most in — 166 published versions on auth-ui alone.
+    components:
+      - name: '@futureverse/auth-ui'
+        kind: react-library
+        version: 1.0.7
+        published: '2025-09-16'
+        description: >-
+          Client-side React UI library providing customizable authentication components for
+          FuturePass sign-in.
+      - name: '@futureverse/auth-react'
+        kind: react-provider
+        version: 5.0.4
+        published: '2025-09-16'
+        description: React authentication provider/context for Futureverse Auth.
+      - name: '@futureverse/auth-react-native'
+        kind: react-native-library
+        version: 1.1.2
+        published: '2025-09-16'
+        description: React Native authentication components and providers.
+      - name: '@futureverse/wagmi-connectors'
+        kind: connector
+        version: 4.0.4
+        published: '2025-09-16'
+        description: >-
+          Wagmi connector extensions so an existing wagmi/RainbowKit wallet UI can offer Futureverse
+          wallets alongside standard EVM wallets.
+  - family: Asset viewers
+    description: Components that render Asset Register assets and composed asset trees in a page.
+    components:
+      - name: '@futureverse/swappable-viewer-react'
+        kind: react-component
+        version: 1.5.8
+        published: '2025-09-16'
+        description: >-
+          Wrapper around the Asset Register exposing hooks for a swappable-asset viewer — the
+          equip/unequip experience the register's asset links exist to support.
+        backing_api: Futureverse Asset Register API
+      - name: '@futureverse/react-unity-viewer'
+        kind: react-component
+        version: 0.1.2
+        published: '2023-05-29'
+        description: React component for embedding Unity WebGL builds.
+        note: Two published versions, last release 2023. Effectively abandoned.
+  - family: Design system
+    components:
+      - name: '@futureverse/component-library'
+        kind: react-library
+        version: 0.2.4
+        published: '2024-07-24'
+        description: Shared Futureverse React component library.
+        note: Still pre-1.0 after 38 releases; last publish 2024.
+
+loader_libraries: []
+loader_note: >-
+  There is no loader script, no window global and no unpkg/jsDelivr distribution. Every component is
+  a bundler-consumed npm package, so these surfaces are reachable only from a JavaScript build —
+  not from a plain HTML page and not from a server-rendered application without React.
+
+hosted_surfaces:
+  - name: Asset Register SIWE generator
+    url: https://ar-docs.futureverse.app/siwe-generator/
+    status: 200
+    kind: hosted-tool
+    description: >-
+      Provider-hosted browser tool that produces the Authorization header value after a wallet
+      signature. The one prebuilt, no-install surface Futureverse serves.
+  - name: The Root Network Portal
+    url: https://portal.rootnet.cloud/#/explorer
+    status: 402
+    kind: hosted-app
+    description: >-
+      The Polkadot-JS style portal the documentation names as "the simplest way to connect to one of
+      the TRN networks". It returned HTTP 402 Payment Required on 2026-08-16.
+
+currency_finding: >-
+  The whole component surface is frozen at 2025-09-16, two weeks before the receivership. Nothing in
+  this family has been published since, and two of the seven components were already more than a
+  year stale before that.
+
+counts:
+  families: 3
+  components: 7
+  hosted_surfaces: 2

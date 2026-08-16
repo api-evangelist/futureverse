@@ -1,0 +1,52 @@
+generated: '2026-08-16'
+method: generated
+source: >-
+  Authored by API Evangelist against real operations. Every operationId, argument name, input type
+  and error code referenced in these skills was read from
+  graphql/futureverse-asset-register.graphql (live introspection of
+  https://ar-api.futureverse.app/graphql on 2026-08-16) or from the Futureverse documentation pages
+  cited in each skill's frontmatter. Nothing is invented.
+searched_first: >-
+  Probed for provider-published skills before generating: docs.therootnetwork.com/AGENTS.md 404,
+  /agents.md 404, /skills 404, /.well-known/skills.json 404. Futureverse publishes none.
+
+skill_count: 3
+skills:
+  - name: futureverse-read-asset-tree
+    file: futureverse-read-asset-tree.md
+    api: Futureverse Asset Register API
+    flow: Resolve an asset and everything linked to it into a JSON-LD asset tree.
+    auth: none (anonymous reads)
+    operations: [Query.assetTree, Query.getAssetTree, Query.asset, Query.assets, Query.inventoryAssets]
+  - name: futureverse-submit-asset-transaction
+    file: futureverse-submit-asset-transaction.md
+    api: Futureverse Asset Register API
+    flow: Build, sign and submit an ARTM transaction to create or delete an asset link, then confirm it.
+    auth: wallet signature (ARTM), per-address nonce
+    operations: [Query.getNonceForChainAddress, Mutation.submitTransaction, Mutation.assetMutation, Query.transaction, Query.getTransaction]
+  - name: futureverse-subscribe-to-asset-events
+    file: futureverse-subscribe-to-asset-events.md
+    api: Futureverse Asset Register API
+    flow: Register a webhook endpoint, subscribe to asset-link events, and handle delivery and retries.
+    auth: SIWE bearer token
+    operations:
+      - Mutation.createWebhookEndpoint
+      - Mutation.createWebhookSubscription
+      - Mutation.updateWebhookEndpoint
+      - Mutation.deleteWebhookSubscription
+      - Mutation.deleteWebhookEndpoint
+      - Query.webhookEndpoints
+      - Query.webhookSubscriptions
+
+not_covered:
+  - api: RootRewards Quest API
+    reason: >-
+      No base URL is published and no key is obtainable without an approved Quest application, so a
+      skill could not be grounded in anything an agent can actually call.
+  - api: FuturePass Identity
+    reason: >-
+      Standard OIDC. A skill would restate the spec rather than teach anything Futureverse-specific.
+  - api: The Root Network Node RPC
+    reason: >-
+      Standard Substrate and Ethereum JSON-RPC method sets, better served by the polkadot.js and
+      ethers.js ecosystems than by a provider skill.

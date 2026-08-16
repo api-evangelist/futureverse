@@ -1,0 +1,134 @@
+generated: '2026-08-16'
+method: searched
+source: https://docs.therootnetwork.com/changelog
+source_status: 200
+docs: https://docs.therootnetwork.com/changelog
+
+scheme: semver-runtime
+scheme_detail: >-
+  Entries are Root Network runtime releases, labelled <spec-version>.<impl>.<patch> (v10.68.0). The
+  leading number is the chain spec version and bumps on consensus-affecting upgrades. Dates are
+  explicit ISO labels on each entry.
+scope: >-
+  The Root Network runtime and its pallets/precompiles only. The Asset Register GraphQL API,
+  FuturePass and RootRewards have NO changelog — none of the 125 pages in the docs index carries
+  release notes for them, and the GraphQL schema exposes no version field.
+
+current_version: v10.68.0
+current_version_date: '2025-02-12'
+latest_entry_date: '2025-03-03'
+entry_count: 26
+window_covered: '2023-11-15 .. 2025-03-03'
+
+staleness_finding: >-
+  The most recent changelog entry is dated 2025-03-03 — seventeen months before this read, and seven
+  months before Futureverse was placed in receivership. The entry ordering is also unreliable:
+  v10.67.0 is dated 2025-03-03 while the higher v10.68.0 is dated 2025-02-12, and v9.64.0 appears
+  twice with identical content. Entries from v4.44.0 onward carry an 'Archived' tag.
+
+entries:
+  - version: v10.67.0
+    date: '2025-03-03'
+    breaking: false
+    additions:
+      - FeeProxy pallet lets partners accumulate fees via the PartnerAttribution pallet when an admin sets a fee percentage.
+      - NFT and SFT pallets support issuing soulbound tokens; ERC-721 and ERC-1155 precompiles support the ERC-5484 interface.
+      - Futurepass balance is used for the Proxy ROOT deposit when calling add_delegate_with_signature.
+    removals:
+      - Removed the sort function from NFT.add_user_tokens.
+  - version: v10.68.0
+    date: '2025-02-12'
+    breaking: false
+    additions:
+      - Variable benchmarks added to the NFT pallet.
+    note: Dated BEFORE v10.67.0 despite the higher version number.
+  - version: v10.66.0
+    date: '2025-02-20'
+    breaking: false
+    additions:
+      - Partner Attribution pallet updated.
+  - version: v10.65.0
+    date: '2025-02-04'
+    breaking: false
+    additions:
+      - Partner Attribution pallet added.
+      - Dependency update for a Grandpa fix.
+  - version: v9.64.0
+    date: '2025-01-17'
+    breaking: false
+    additions:
+      - nft_collectionDetails RPC call added.
+      - ERC-165 support on the ERC-20 and ERC-1155 EVM precompiles.
+      - set_token_name extrinsic added to the SFT pallet.
+      - Sylo Data Verification pallet introduced.
+      - NFT burn event now includes the signer.
+    note: This entry is duplicated verbatim in the published changelog.
+  - version: v8.63.0
+    date: '2024-12-06'
+    breaking: false
+    additions:
+      - Multi-chain support in the NFI pallet.
+      - ERC-165 support for the ERC-721 precompile.
+      - Destination tag added to the XRPL alt-token bridge.
+    removals:
+      - Storage getters removed from pallets in preparation for a Substrate upgrade.
+  - version: v8.62.0
+    date: '2024-11-07'
+    breaking: false
+    additions:
+      - XRPL NFT bridging.
+      - pallet-migration introduced for multi-block migrations.
+      - Improved transact error handling.
+  - version: v8.61.0
+    date: '2024-10-17'
+    breaking: false
+    fixes:
+      - Runtime migration fix deploying EIP-2470 and the Universal deployer via a runtime upgrade.
+  - version: v8.59.0
+    date: '2024-09-18'
+    breaking: false
+    additions:
+      - SFT support in the marketplace precompile.
+      - Per-asset payment delay in the XRPL bridge.
+    fixes:
+      - Simple offers can no longer be made on non-existent tokens.
+  - version: v8.58.0
+    date: '2024-09-04'
+    breaking: false
+    additions:
+      - Token bridging from XRPL to TRN.
+  - version: v8.57.0
+    date: '2024-08-27'
+    breaking: false
+    additions:
+      - NFI pallet enabling NFI compatibility for any NFT or SFT collection.
+      - ECAdd, ECMul and ECPairing precompiles.
+      - Utility flags on NFT/SFT collections to prevent minting, transferring and burning.
+  - version: v8.56.0
+    date: '2024-08-07'
+    breaking: true
+    breaking_detail: >-
+      Substrate upgraded to v1.0.0; MAXIMUM_BLOCK_WEIGHT raised to 1s and BLOCK_GAS_LIMIT to 15
+      million. A platform-level upgrade with consensus and gas-accounting effects.
+    additions:
+      - Build toolchain moved to stable 1.80.0.
+
+deprecations_noted:
+  - item: NFT.add_user_tokens sort function
+    version: v10.67.0
+    action: removed
+  - item: VortexDistribution `price` parameter
+    version: v4.47.x
+    action: 'temporarily deprecated — "not currently utilized in the distribution logic"'
+  - item: Futurepass migration code
+    version: v7.53.0
+    action: removed as deprecated
+  - item: get_vault_account
+    version: v4.47.x
+    action: removed as obsolete
+  - item: submit_challenge extrinsic on the ETH bridge
+    version: v4.44.0
+    action: disabled
+
+see_also:
+  lifecycle: lifecycle/futureverse-lifecycle.yml
