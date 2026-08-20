@@ -19,6 +19,21 @@ specificationVersion: '0.23'
 created: '2026-08-16'
 modified: '2026-08-16'
 tags:
+  - Blockchain
+  - Web3
+  - Metaverse
+  - Digital Assets
+  - NFT
+  - GraphQL
+  - Identity
+  - OpenID Connect
+  - asset-registry
+  - Layer 1
+  - EVM
+  - Gaming
+  - agent-native
+  - MCP
+tags_raw:
   - blockchain
   - web3
   - metaverse
@@ -51,6 +66,13 @@ apis:
     humanURL: https://docs.therootnetwork.com/asset-register/introduction
     baseURL: https://ar-api.futureverse.app/graphql
     tags:
+      - GraphQL
+      - Digital Assets
+      - asset-registry
+      - NFT
+      - Web3
+      - Blockchain
+    tags_raw:
       - graphql
       - digital-assets
       - asset-registry
@@ -92,6 +114,11 @@ apis:
     humanURL: https://docs.therootnetwork.com/learn/features/identity-protocol
     baseURL: https://login.futureverse.app
     tags:
+      - Identity
+      - OpenID Connect
+      - Authentication
+      - Web3
+    tags_raw:
       - identity
       - openid-connect
       - oauth
@@ -116,6 +143,11 @@ apis:
       privately when a Quest application is approved, so no operation is publicly callable.
     humanURL: https://docs.therootnetwork.com/rootrewards/api-reference
     tags:
+      - Rewards
+      - Loyalty
+      - Web3
+      - Gaming
+    tags_raw:
       - rewards
       - loyalty
       - web3
@@ -144,6 +176,12 @@ apis:
     humanURL: https://docs.therootnetwork.com/build/substrate/api-reference/json-rpc
     baseURL: https://root.rootnet.live/archive
     tags:
+      - Blockchain
+      - JSON-RPC
+      - EVM
+      - Layer 1
+      - Substrate
+    tags_raw:
       - blockchain
       - json-rpc
       - evm
@@ -167,6 +205,10 @@ apis:
     humanURL: https://docs.therootnetwork.com/intro
     baseURL: https://docs.therootnetwork.com/mcp
     tags:
+      - MCP
+      - agent-native
+      - Documentation
+    tags_raw:
       - mcp
       - agent-native
       - documentation
