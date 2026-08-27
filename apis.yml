@@ -54,175 +54,178 @@ maintainers:
   - FN: APIs.json
     email: info@apis.io
 apis:
-  - name: Futureverse Asset Register API
-    description: >-
-      Relay-compliant GraphQL API for the Asset Register — a metadata ledger that defines what an
-      asset is, what it can do, and which environments it works in, across chains and for off-chain
-      assets. 29 queries cover assets, asset trees, collections, token schemas, namespaces,
-      accounts, owners, transactions and webhook subscriptions; 28 mutations cover schema
-      registration, asset linking, off-chain asset registration, profiles and webhook management.
-      Introspection is open and anonymous; writes require a Sign-In-With-Ethereum bearer token or a
-      wallet-signed ARTM transaction.
-    humanURL: https://docs.therootnetwork.com/asset-register/introduction
-    baseURL: https://ar-api.futureverse.app/graphql
-    tags:
-      - GraphQL
-      - Digital Assets
-      - asset-registry
-      - NFT
-      - Web3
-      - Blockchain
-    tags_raw:
-      - graphql
-      - digital-assets
-      - asset-registry
-      - nft
-      - web3
-      - blockchain
-    properties:
-      - type: GraphQL
-        url: https://ar-api.futureverse.app/graphql
-      - type: GraphQL
-        url: graphql/futureverse-asset-register.graphql
-      - type: Documentation
-        url: https://docs.therootnetwork.com/asset-register/introduction
-      - type: APIReference
-        url: https://docs.therootnetwork.com/asset-register/getting-started
-      - type: GettingStarted
-        url: https://docs.therootnetwork.com/asset-register/getting-started
-      - type: DeveloperPortal
-        url: https://ar-docs.futureverse.app/
-      - type: Authentication
-        url: authentication/futureverse-authentication.yml
-      - type: Conventions
-        url: conventions/futureverse-conventions.yml
-      - type: DataModel
-        url: data-model/futureverse-data-model.yml
-      - type: ErrorCatalog
-        url: errors/futureverse-problem-types.yml
-      - type: Webhooks
-        url: asyncapi/futureverse-asset-register-events.yml
-      - type: Sandbox
-        url: sandbox/futureverse-sandbox.yml
-  - name: FuturePass Identity (OpenID Connect)
-    description: >-
-      FuturePass is Futureverse's smart-wallet identity system, exposed to developers as a standards
-      compliant OpenID Connect provider. The discovery document at login.futureverse.app advertises
-      authorization, token, userinfo, introspection, revocation, end-session and pushed
-      authorization request endpoints, PKCE S256, five client authentication methods, and custom
-      claims that bind an OIDC subject to an EOA, a custodian, a chain ID and a FuturePass address.
-    humanURL: https://docs.therootnetwork.com/learn/features/identity-protocol
-    baseURL: https://login.futureverse.app
-    tags:
-      - Identity
-      - OpenID Connect
-      - Authentication
-      - Web3
-    tags_raw:
-      - identity
-      - openid-connect
-      - oauth
-      - authentication
-      - web3
-    properties:
-      - type: OpenIDConnect
-        url: https://login.futureverse.app/.well-known/openid-configuration
-      - type: WellKnown
-        url: well-known/futureverse-openid-configuration.json
-      - type: OAuthScopes
-        url: scopes/futureverse-scopes.yml
-      - type: Authentication
-        url: authentication/futureverse-authentication.yml
-      - type: Documentation
-        url: https://docs.therootnetwork.com/learn/features/identity-protocol
-  - name: RootRewards Quest API
-    description: >-
-      REST API that lets an approved partner application read quest and campaign detail and allocate
-      RootRewards points to a FuturePass address. Four operations, an x-api-key header whose keys
-      are prefixed sk_, and documented 200/400/401/404 semantics. The base URL and key are issued
-      privately when a Quest application is approved, so no operation is publicly callable.
-    humanURL: https://docs.therootnetwork.com/rootrewards/api-reference
-    tags:
-      - Rewards
-      - Loyalty
-      - Web3
-      - Gaming
-    tags_raw:
-      - rewards
-      - loyalty
-      - web3
-      - gaming
-    x-baseurl-note: >-
-      No base URL is published. The reference states verbatim "You will receive the Base URL, API
-      key, and testing instructions when your Quest application is approved." A host has not been
-      guessed; the generated OpenAPI carries a required server variable instead.
-    properties:
-      - type: OpenAPI
-        url: openapi/futureverse-rootrewards-quest-api-openapi.yml
-      - type: Documentation
-        url: https://docs.therootnetwork.com/rootrewards/overview
-      - type: APIReference
-        url: https://docs.therootnetwork.com/rootrewards/api-reference
-      - type: Sandbox
-        url: https://docs.therootnetwork.com/rootrewards/testing-instructions
-      - type: ErrorCatalog
-        url: errors/futureverse-problem-types.yml
-  - name: The Root Network Node RPC
-    description: >-
-      Public archive-node RPC for The Root Network mainnet, exposing both the Substrate JSON-RPC
-      surface (author, babe, chain, state, system and custom nft/dex/fee-proxy methods over HTTP and
-      WebSocket) and an Ethereum-compatible EVM JSON-RPC on chain ID 7668. The documentation warns
-      these public endpoints are "not for sustained or business use".
-    humanURL: https://docs.therootnetwork.com/build/substrate/api-reference/json-rpc
-    baseURL: https://root.rootnet.live/archive
-    tags:
-      - Blockchain
-      - JSON-RPC
-      - EVM
-      - Layer 1
-      - Substrate
-    tags_raw:
-      - blockchain
-      - json-rpc
-      - evm
-      - layer-1
-      - substrate
-    properties:
-      - type: APIReference
-        url: https://docs.therootnetwork.com/build/substrate/api-reference/json-rpc
-      - type: Documentation
-        url: https://docs.therootnetwork.com/build/connecting-to-the-root-network
-      - type: Sandbox
-        url: sandbox/futureverse-sandbox.yml
-      - type: Lifecycle
-        url: lifecycle/futureverse-lifecycle.yml
-  - name: The Root Network Documentation MCP Server
-    description: >-
-      Remote, unauthenticated Model Context Protocol server on the documentation host exposing three
-      tools — documentation search, a read-only virtual filesystem over the docs corpus, and a
-      feedback submitter. It is a documentation agent surface only; it cannot call the Asset
-      Register, FuturePass or RootRewards APIs.
-    humanURL: https://docs.therootnetwork.com/intro
-    baseURL: https://docs.therootnetwork.com/mcp
-    tags:
-      - MCP
-      - agent-native
-      - Documentation
-    tags_raw:
-      - mcp
-      - agent-native
-      - documentation
-    properties:
-      - type: MCPServer
-        url: https://docs.therootnetwork.com/mcp
-      - type: MCPServer
-        url: mcp/futureverse-mcp.yml
-      - type: ToolCrosswalk
-        url: mcp/futureverse-tool-crosswalk.yml
-      - type: AgentCard
-        url: a2a/futureverse-a2a.yml
-      - type: LLMsTxt
-        url: llms/futureverse-llms.txt
+- name: Futureverse Asset Register API
+  description: >-
+    Relay-compliant GraphQL API for the Asset Register — a metadata ledger that defines what an asset
+    is, what it can do, and which environments it works in, across chains and for off-chain assets. 29
+    queries cover assets, asset trees, collections, token schemas, namespaces, accounts, owners, transactions
+    and webhook subscriptions; 28 mutations cover schema registration, asset linking, off-chain asset
+    registration, profiles and webhook management. Introspection is open and anonymous; writes require
+    a Sign-In-With-Ethereum bearer token or a wallet-signed ARTM transaction.
+  humanURL: https://docs.therootnetwork.com/asset-register/introduction
+  baseURL: https://ar-api.futureverse.app/graphql
+  tags:
+  - GraphQL
+  - Digital Assets
+  - asset-registry
+  - NFT
+  - Web3
+  - Blockchain
+  tags_raw:
+  - graphql
+  - digital-assets
+  - asset-registry
+  - nft
+  - web3
+  - blockchain
+  properties:
+  - type: GraphQL
+    url: https://ar-api.futureverse.app/graphql
+  - type: GraphQL
+    url: graphql/futureverse-asset-register.graphql
+  - type: Documentation
+    url: https://docs.therootnetwork.com/asset-register/introduction
+  - type: APIReference
+    url: https://docs.therootnetwork.com/asset-register/getting-started
+  - type: GettingStarted
+    url: https://docs.therootnetwork.com/asset-register/getting-started
+  - type: DeveloperPortal
+    url: https://ar-docs.futureverse.app/
+  - type: Authentication
+    url: authentication/futureverse-authentication.yml
+  - type: Conventions
+    url: conventions/futureverse-conventions.yml
+  - type: DataModel
+    url: data-model/futureverse-data-model.yml
+  - type: ErrorCatalog
+    url: errors/futureverse-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/futureverse-asset-register-events.yml
+  - type: Sandbox
+    url: sandbox/futureverse-sandbox.yml
+- name: FuturePass Identity (OpenID Connect)
+  description: >-
+    FuturePass is Futureverse's smart-wallet identity system, exposed to developers as a standards compliant
+    OpenID Connect provider. The discovery document at login.futureverse.app advertises authorization,
+    token, userinfo, introspection, revocation, end-session and pushed authorization request endpoints,
+    PKCE S256, five client authentication methods, and custom claims that bind an OIDC subject to an EOA,
+    a custodian, a chain ID and a FuturePass address.
+  humanURL: https://docs.therootnetwork.com/learn/features/identity-protocol
+  baseURL: https://login.futureverse.app
+  tags:
+  - Identity
+  - OpenID Connect
+  - Authentication
+  - Web3
+  tags_raw:
+  - identity
+  - openid-connect
+  - oauth
+  - authentication
+  - web3
+  properties:
+  - type: OpenIDConnect
+    url: https://login.futureverse.app/.well-known/openid-configuration
+  - type: WellKnown
+    url: well-known/futureverse-openid-configuration.json
+  - type: OAuthScopes
+    url: scopes/futureverse-scopes.yml
+  - type: Authentication
+    url: authentication/futureverse-authentication.yml
+  - type: Documentation
+    url: https://docs.therootnetwork.com/learn/features/identity-protocol
+- name: The Root Network Node RPC
+  description: >-
+    Public archive-node RPC for The Root Network mainnet, exposing both the Substrate JSON-RPC surface
+    (author, babe, chain, state, system and custom nft/dex/fee-proxy methods over HTTP and WebSocket)
+    and an Ethereum-compatible EVM JSON-RPC on chain ID 7668. The documentation warns these public endpoints
+    are "not for sustained or business use".
+  humanURL: https://docs.therootnetwork.com/build/substrate/api-reference/json-rpc
+  baseURL: https://root.rootnet.live/archive
+  tags:
+  - Blockchain
+  - JSON-RPC
+  - EVM
+  - Layer 1
+  - Substrate
+  tags_raw:
+  - blockchain
+  - json-rpc
+  - evm
+  - layer-1
+  - substrate
+  properties:
+  - type: APIReference
+    url: https://docs.therootnetwork.com/build/substrate/api-reference/json-rpc
+  - type: Documentation
+    url: https://docs.therootnetwork.com/build/connecting-to-the-root-network
+  - type: Sandbox
+    url: sandbox/futureverse-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/futureverse-lifecycle.yml
+- name: The Root Network Documentation MCP Server
+  description: >-
+    Remote, unauthenticated Model Context Protocol server on the documentation host exposing three tools
+    — documentation search, a read-only virtual filesystem over the docs corpus, and a feedback submitter.
+    It is a documentation agent surface only; it cannot call the Asset Register, FuturePass or RootRewards
+    APIs.
+  humanURL: https://docs.therootnetwork.com/intro
+  baseURL: https://docs.therootnetwork.com/mcp
+  tags:
+  - MCP
+  - agent-native
+  - Documentation
+  tags_raw:
+  - mcp
+  - agent-native
+  - documentation
+  properties:
+  - type: MCPServer
+    url: https://docs.therootnetwork.com/mcp
+  - type: MCPServer
+    url: mcp/futureverse-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/futureverse-tool-crosswalk.yml
+  - type: AgentCard
+    url: a2a/futureverse-a2a.yml
+  - type: LLMsTxt
+    url: llms/futureverse-llms.txt
+- aid: futureverse:futureverse-campaigns-api
+  name: Futureverse Campaigns API
+  description: Public campaign detail. Campaigns group quests but hold no balances.
+  humanURL: https://docs.therootnetwork.com/asset-register/introduction
+  baseURL: https://ar-api.futureverse.app/graphql
+  tags:
+  - campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/futureverse-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://docs.therootnetwork.com/rootrewards/overview
+  - type: APIReference
+    url: https://docs.therootnetwork.com/rootrewards/api-reference
+  - type: Sandbox
+    url: https://docs.therootnetwork.com/rootrewards/testing-instructions
+  - type: ErrorCatalog
+    url: errors/futureverse-problem-types.yml
+- aid: futureverse:futureverse-quests-api
+  name: Futureverse Quests API
+  description: Quest detail, public quest discovery, and point allocation.
+  humanURL: https://docs.therootnetwork.com/asset-register/introduction
+  baseURL: https://ar-api.futureverse.app/graphql
+  tags:
+  - quests
+  properties:
+  - type: OpenAPI
+    url: openapi/futureverse-quests-api-openapi.yml
+  - type: Documentation
+    url: https://docs.therootnetwork.com/rootrewards/overview
+  - type: APIReference
+    url: https://docs.therootnetwork.com/rootrewards/api-reference
+  - type: Sandbox
+    url: https://docs.therootnetwork.com/rootrewards/testing-instructions
+  - type: ErrorCatalog
+    url: errors/futureverse-problem-types.yml
 common:
   - type: Website
     url: https://www.futureverse.com/
