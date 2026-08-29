@@ -11,6 +11,18 @@ description: >-
   on 2025-12-16. Its corporate website and its original developer documentation host are both
   offline, but the TRN documentation, the Asset Register GraphQL endpoint, the FuturePass OIDC
   provider, the mainnet RPC nodes and 35 npm packages remain live and publicly reachable.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://mintlify.s3.us-west-1.amazonaws.com/therootnetwork/images/trn-hero.png
 url: https://raw.githubusercontent.com/api-evangelist/futureverse/refs/heads/main/apis.yml
 x-type: company
