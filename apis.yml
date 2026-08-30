@@ -33,14 +33,14 @@ modified: '2026-08-16'
 tags:
   - Blockchain
   - Web3
-  - Metaverse
-  - Digital Assets
-  - NFT
-  - GraphQL
+  - metaverse
+  - digital-assets
+  - nft
+  - graphql
   - Identity
-  - OpenID Connect
+  - openid-connect
   - asset-registry
-  - Layer 1
+  - layer-1
   - EVM
   - Gaming
   - agent-native
@@ -77,10 +77,10 @@ apis:
   humanURL: https://docs.therootnetwork.com/asset-register/introduction
   baseURL: https://ar-api.futureverse.app/graphql
   tags:
-  - GraphQL
-  - Digital Assets
+  - graphql
+  - digital-assets
   - asset-registry
-  - NFT
+  - nft
   - Web3
   - Blockchain
   tags_raw:
@@ -126,7 +126,7 @@ apis:
   baseURL: https://login.futureverse.app
   tags:
   - Identity
-  - OpenID Connect
+  - openid-connect
   - Authentication
   - Web3
   tags_raw:
@@ -156,10 +156,10 @@ apis:
   baseURL: https://root.rootnet.live/archive
   tags:
   - Blockchain
-  - JSON-RPC
+  - json-rpc
   - EVM
-  - Layer 1
-  - Substrate
+  - layer-1
+  - substrate
   tags_raw:
   - blockchain
   - json-rpc
@@ -208,6 +208,8 @@ apis:
   humanURL: https://docs.therootnetwork.com/asset-register/introduction
   baseURL: https://ar-api.futureverse.app/graphql
   tags:
+  - Campaigns
+  tags_raw:
   - campaigns
   properties:
   - type: OpenAPI
@@ -226,6 +228,8 @@ apis:
   humanURL: https://docs.therootnetwork.com/asset-register/introduction
   baseURL: https://ar-api.futureverse.app/graphql
   tags:
+  - Quests
+  tags_raw:
   - quests
   properties:
   - type: OpenAPI
