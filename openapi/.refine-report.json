@@ -1,0 +1,22 @@
+{
+  "provider": "futureverse",
+  "sources": [
+    "_original/futureverse-rootrewards-quest-api-openapi.yml"
+  ],
+  "outputs": [
+    "futureverse-campaigns-api-openapi.yml",
+    "futureverse-quests-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "futureverse-rootrewards-quest-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "futureverse-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "futureverse-quests-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
