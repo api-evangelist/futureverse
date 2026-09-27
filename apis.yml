@@ -59,8 +59,9 @@ tags:
   - Layer 1
   - EVM
   - Gaming
-  - agent-native
+  - Agent-Native
   - MCP
+  - A2A
 tags_raw:
   - blockchain
   - web3
@@ -76,6 +77,7 @@ tags_raw:
   - gaming
   - agent-native
   - mcp
+  - A2A
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
@@ -201,7 +203,7 @@ apis:
   baseURL: https://docs.therootnetwork.com/mcp
   tags:
   - MCP
-  - agent-native
+  - Agent-Native
   - Documentation
   tags_raw:
   - mcp
@@ -370,3 +372,10 @@ x-pointers-deliberately-absent:
     reason: >-
       No pricing page exists on any reachable surface. See plans/futureverse-plans-pricing.yml
       (plan_count 0).
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://docs.therootnetwork.com/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3"
+  control: 404
