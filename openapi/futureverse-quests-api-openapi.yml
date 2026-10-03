@@ -120,6 +120,34 @@ paths:
           description: Quest not found
 components:
   schemas:
+    PublicQuest:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        total_points:
+          type: integer
+        expected_points_per_completion:
+          type: integer
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        campaign:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
     AllocatePointsResponse:
       type: object
       properties:
@@ -150,34 +178,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Payout'
-    PublicQuest:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-        total_points:
-          type: integer
-        expected_points_per_completion:
-          type: integer
-        start:
-          type: string
-          format: date-time
-        end:
-          type: string
-          format: date-time
-        campaign:
-          type: object
-          properties:
-            id:
-              type: string
-            name:
-              type: string
-            description:
-              type: string
     AllocatePointsRequest:
       type: object
       required:
