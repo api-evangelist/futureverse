@@ -55,37 +55,6 @@ paths:
           description: Campaign not found
 components:
   schemas:
-    Campaign:
-      type: object
-      properties:
-        id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        name:
-          type: string
-        description:
-          type: string
-        start:
-          type: string
-          format: date-time
-        end:
-          type: string
-          format: date-time
-        is_active:
-          type: boolean
-        external_app_id:
-          type:
-          - string
-          - 'null'
-        quests:
-          type: array
-          items:
-            $ref: '#/components/schemas/CampaignQuest'
     CampaignQuest:
       type: object
       properties:
@@ -117,6 +86,37 @@ components:
           type: string
         campaign_id:
           type: integer
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+        description:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+        external_app_id:
+          type:
+          - string
+          - 'null'
+        quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignQuest'
   securitySchemes:
     questApiKey:
       type: apiKey

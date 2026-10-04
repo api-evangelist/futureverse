@@ -120,6 +120,64 @@ paths:
           description: Quest not found
 components:
   schemas:
+    AllocatePointsResponse:
+      type: object
+      properties:
+        payout:
+          $ref: '#/components/schemas/Payout'
+    Payout:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        account:
+          type: object
+          properties:
+            pass:
+              type: string
+              description: FuturePass address.
+    AllocatePointsRequest:
+      type: object
+      required:
+      - points
+      - address
+      properties:
+        points:
+          type: integer
+          description: Number of points to allocate.
+        address:
+          type: string
+          description: Pass address to receive points (converted to checksum format server-side).
+    QuestDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        total_points:
+          type: integer
+        points_remaining:
+          type: integer
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+        payouts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payout'
     PublicQuest:
       type: object
       properties:
@@ -148,64 +206,6 @@ components:
               type: string
             description:
               type: string
-    AllocatePointsResponse:
-      type: object
-      properties:
-        payout:
-          $ref: '#/components/schemas/Payout'
-    QuestDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-        total_points:
-          type: integer
-        points_remaining:
-          type: integer
-        start:
-          type: string
-          format: date-time
-        end:
-          type: string
-          format: date-time
-        is_active:
-          type: boolean
-        payouts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payout'
-    AllocatePointsRequest:
-      type: object
-      required:
-      - points
-      - address
-      properties:
-        points:
-          type: integer
-          description: Number of points to allocate.
-        address:
-          type: string
-          description: Pass address to receive points (converted to checksum format server-side).
-    Payout:
-      type: object
-      properties:
-        id:
-          type: string
-        amount:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        account:
-          type: object
-          properties:
-            pass:
-              type: string
-              description: FuturePass address.
   securitySchemes:
     questApiKey:
       type: apiKey
